@@ -81,7 +81,8 @@ will be approximately right, which for a design system is the same as wrong.
 ## The rules that carry the system
 
 **Colour.**
-- `--accent` is `#E1261C` (Pantone 485C), declared as `--a-5`. It is the only decorative
+- `--accent` is `#E1261C` (Pantone 485C), declared as `--a-5`, which resolves to that hex
+  exactly. It is the only decorative
   chromatic colour in the system. It marks primary actions, the brand mark, and one focus
   series in a chart. Nothing else.
 - Red never forms a headline, a section background, a full-width band, a table header band,
@@ -109,7 +110,7 @@ will be approximately right, which for a design system is the same as wrong.
 - Three radii: `--r-1` 2px, `--r-2` 3px, `--r-3` 5px. This is a near-square system and it is
   meant to be. Do not soften it.
 - Hero and evidence photography runs full-bleed with hard edges and no radius.
-- The only circle in the system is the checkbox tick container.
+- The only circle in the system is the loading spinner. The checkbox is `--r-1`.
 
 **Elevation.**
 - No drop shadows. Anywhere. Depth comes from surface contrast: `--page` against `--panel`,

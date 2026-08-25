@@ -3,3 +3,4 @@ __pycache__/
 .DS_Store
 _density_shot.png
 _to_delete/
+.gitjunk/

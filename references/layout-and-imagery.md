@@ -58,7 +58,7 @@ Every image slot on a Tru-Trac screen is one of four kinds. Nothing else goes in
 | Kind | What it proves | Ratio | Treatment |
 |---|---|---|---|
 | **Site** | We work in plants like yours | `16 / 9` | Full bleed, hard edges, no radius. Low-key grade on stage bands. `--photo-scrim` under any text |
-| **Product** | Here is the equipment | `4 / 3` | Neutral ground, 6px radius, inside a card only |
+| **Product** | Here is the equipment | `4 / 3` | Neutral ground, no radius, inside a card only |
 | **Condition** | Here is before and after | `3 / 2` | Matched framing, unretouched, dated, presented as a pair |
 | **Technical** | Here is the geometry | free | Line drawing, `1.5px` stroke, `currentColor`, no fills except a 0.10 tint for material |
 
@@ -84,14 +84,9 @@ the structure, the centre line and the dimension that matters.
 ## Interaction states
 
 Every interactive element declares four states. A component with only a default state is not
-finished.
-
-| State | Treatment |
-|---|---|
-| Hover | Primary fill to `--accent-hover`. Ghost gains a 6% `currentColor` fill. Card border to `--ink-3`. 120ms ease |
-| Focus | 3px `--accent-tint` outline, 2px offset. Never removed, never replaced with a colour change alone |
-| Active | Fill darkens a further step. No transform, no scale bounce |
-| Disabled | `--rule-2` fill, `--ink-3` text, cursor not-allowed. No opacity fade on text |
+finished. **The states, their exact values and the accessibility contract live in
+`references/components.md`.** They are defined once, there, and this file does not restate them:
+a second copy is how the two documents came to disagree.
 
 ## Responsive
 

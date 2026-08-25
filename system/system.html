@@ -16,9 +16,9 @@
   --n-3:oklch(0.935 0.003 285); --n-4:oklch(0.885 0.004 285); --n-5:oklch(0.79 0.005 285);
   --n-6:oklch(0.66 0.006 285); --n-7:oklch(0.535 0.007 285); --n-8:oklch(0.43 0.007 285);
   --n-9:oklch(0.345 0.006 285); --n-10:oklch(0.245 0.005 285); --n-11:oklch(0.16 0.004 285);
-  --a-1:oklch(0.96 0.018 27); --a-2:oklch(0.88 0.06 27);  --a-3:oklch(0.70 0.15 27);
-  --a-4:oklch(0.632 0.20 27); --a-5:oklch(0.577 0.223 27.3);  /* #E1261C, locked */
-  --a-6:oklch(0.50 0.19 27);  --a-7:oklch(0.38 0.14 27);
+  --a-1:oklch(0.96 0.018 29.14); --a-2:oklch(0.88 0.06 29.14);  --a-3:oklch(0.70 0.15 29.14);
+  --a-4:oklch(0.632 0.20 29.14); --a-5:oklch(0.5855 0.2205 29.14);  /* #E1261C, locked */
+  --a-6:oklch(0.50 0.19 29.14);  --a-7:oklch(0.38 0.14 29.14);
   --status-ok:oklch(0.52 0.13 152); --status-warn:oklch(0.62 0.13 75); --status-info:oklch(0.52 0.13 250);
   --font-sans:'Archivo',ui-sans-serif,system-ui,sans-serif;
   --font-mono:'JetBrains Mono',ui-monospace,monospace;
@@ -41,17 +41,16 @@
   --paper-rule-1:oklch(0.16 0.004 285 /.14); --paper-rule-2:oklch(0.16 0.004 285 /.30);
   --paper-rule-3:oklch(0.16 0.004 285 /.48);
   --paper-inv:oklch(1 0 0); --paper-inv-2:oklch(1 0 0 /.62);
-  --accent:var(--a-5); --accent-hover:var(--a-6); --accent-tint:oklch(0.577 0.223 27.3 /.09);
+  --accent:var(--a-5); --accent-hover:var(--a-6); --accent-tint:oklch(0.5855 0.2205 29.14 /.09);
   --accent-focus:var(--a-5);
   --r-1:2px; --r-2:3px; --r-3:5px;
   --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
   --s-10:40px; --s-12:48px; --s-16:64px; --s-20:80px; --s-24:96px;
   --layout-tap:44px; --layout-measure:66ch;
-  /* tints and scrims, so no component invents its own alpha */
   /* tints, edges and scrims, so no component invents its own alpha */
-  --accent-wash:oklch(0.577 0.223 27.3 /.07);
-  --accent-line:oklch(0.577 0.223 27.3 /.16);
-  --accent-edge:oklch(0.577 0.223 27.3 /.55);
+  --accent-wash:oklch(0.5855 0.2205 29.14 /.07);
+  --accent-line:oklch(0.5855 0.2205 29.14 /.16);
+  --accent-edge:oklch(0.5855 0.2205 29.14 /.55);
   --status-warn-edge:oklch(0.62 0.13 75 /.5);
   --spinner-track:oklch(1 0 0 /.35);
   /* text, scrim and grade over photography */
@@ -74,7 +73,7 @@
   --f-h1:39px;   --l-h1:48px;     /* 6 */
   --f-ttl:61px;  --l-ttl:72px;    /* 9 */
   --layout-base:8px;
-  /* Three rule weights, and they carry meaning */
+  /* Four rule weights. Definitions and their jobs are above, with the ramp. */
   --z-sticky:100; --z-dropdown:200; --z-modal:400; --z-toast:500; --z-tooltip:600;
 }
 [data-mode="dark"]{
@@ -84,7 +83,7 @@
   --ink-3:oklch(0.94 0.002 285 /.54); --ink-4:oklch(0.94 0.002 285 /.36);
   --rule-1:oklch(0.94 0.002 285 /.07); --rule-2:oklch(0.94 0.002 285 /.13);
   --rule-3:oklch(0.94 0.002 285 /.26); --rule-4:oklch(0.94 0.002 285 /.5);
-  --accent-hover:var(--a-4); --accent-tint:oklch(0.577 0.223 27.3 /.18);
+  --accent-hover:var(--a-4); --accent-tint:oklch(0.5855 0.2205 29.14 /.18);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{overflow-x:clip;

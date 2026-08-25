@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Tru-Trac design system — density gate.
 
-The compliance checker (validate.py) proves a page is not WRONG. It reads hex
-codes and radii and cannot tell a considered page from an empty one. This gate
+ds-audit.py proves a page's token discipline is sound. It reads declarations and
+resolves variables, and it cannot tell a considered page from an empty one. This gate
 proves a page is not EMPTY, which is the failure mode that actually gets work
 rejected.
 

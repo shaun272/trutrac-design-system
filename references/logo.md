@@ -44,8 +44,13 @@ original artwork. The red and charcoal ink is untouched.
 ## Colour, and a discrepancy worth knowing
 
 The supplied rasters carry **`#e42526`** and **`#e32726`** for red and **`#3a3a3c`** for
-charcoal. The locked brand tokens are **`#E1261C`** (Pantone 485C) and **`#414042`**. They are
-close and they are not the same.
+charcoal. The locked brand values are **`#E1261C`** (Pantone 485C) for red and **`#414042`**
+for charcoal. They are close to the raster values and they are not the same.
+
+`--a-5` resolves to `#E1261C` exactly, so the accent in the token file is the brand red.
+Brand charcoal `#414042` is the print and ink reference; the screen neutral ramp (`--n-0` to
+`--n-11`) is a separate OKLCH ramp and no step on it equals `#414042`. See `provenance.md`,
+open items, before assuming the two are interchangeable.
 
 **Never sample colour from a logo file.** Use the tokens. The rasters are artwork, not a
 palette, and the difference is invisible until a sampled red sits next to a token red in the

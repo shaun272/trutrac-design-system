@@ -147,11 +147,112 @@ if os.path.isdir(tests_dir):
                 if used not in declared:
                     fail("TESTS", f"{rel} uses '{used}' which is not declared in tokens.css")
 
+# ----------------------------------------------------- OKLCH, resolved not trusted
+#
+# The accent was wrong for as long as nobody resolved it. The token said
+# oklch(0.577 0.223 27.3) and the comment beside it said "#E1261C, locked". Those
+# are different colours. A string search for the hex found it in the comment and
+# reported the brand as intact. So this converts, in pure Python with no
+# dependencies, and compares the actual colour.
+
+def _oklch_to_hex(l, c, h):
+    import math
+    a = c * math.cos(math.radians(h))
+    b = c * math.sin(math.radians(h))
+    l_ = (l + 0.3963377774 * a + 0.2158037573 * b) ** 3
+    m_ = (l - 0.1055613458 * a - 0.0638541728 * b) ** 3
+    s_ = (l - 0.0894841775 * a - 1.2914855480 * b) ** 3
+    lin = (
+        4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_,
+        -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_,
+        -0.0041960863 * l_ - 0.7034186147 * m_ + 1.7076147010 * s_,
+    )
+    out = []
+    for v in lin:
+        v = 12.92 * v if v <= 0.0031308 else 1.055 * (v ** (1 / 2.4)) - 0.055
+        out.append(max(0, min(255, round(v * 255))))
+    return "#%02x%02x%02x" % tuple(out)
+
+
+def _relative_luminance(hexstr):
+    h = hexstr.lstrip("#")
+    out = []
+    for i in (0, 2, 4):
+        v = int(h[i:i + 2], 16) / 255.0
+        out.append(v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * out[0] + 0.7152 * out[1] + 0.0722 * out[2]
+
+
+def _contrast(fg, bg):
+    a, b = _relative_luminance(fg), _relative_luminance(bg)
+    hi, lo = max(a, b), min(a, b)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def resolve(name, tokens, _seen=None):
+    """Follow var() chains down to a literal, then resolve oklch() to hex."""
+    _seen = _seen or set()
+    if name in _seen or name not in tokens:
+        return None
+    _seen.add(name)
+    val = tokens[name].strip()
+    m = re.fullmatch(r"var\(\s*(--[a-z0-9-]+)\s*\)", val)
+    if m:
+        return resolve(m.group(1), tokens, _seen)
+    m = re.fullmatch(r"oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)", val)
+    if m:
+        return _oklch_to_hex(float(m.group(1)), float(m.group(2)), float(m.group(3)))
+    if re.fullmatch(r"#[0-9a-fA-F]{6}", val):
+        return val.lower()
+    return None
+
+
+BRAND_RED = "#e1261c"          # Pantone 485C. Locked. See references/logo.md.
+
+accent = resolve("--accent", css_tokens)
+if accent is None:
+    fail("BRAND", "--accent does not resolve to a colour; the chain is broken")
+elif accent != BRAND_RED:
+    fail("BRAND", f"--accent resolves to {accent}, not the locked brand red {BRAND_RED}")
+
+a5 = resolve("--a-5", css_tokens)
+if a5 and a5 != BRAND_RED:
+    fail("BRAND", f"--a-5 resolves to {a5}, not the locked brand red {BRAND_RED}")
+
+# The button contract is a white label on the accent fill. If that stops passing AA,
+# the contract is broken and no amount of correct tokens saves it.
+if accent:
+    ratio = _contrast("#ffffff", accent)
+    if ratio < 4.5:
+        fail("A11Y", f"white on --accent is {ratio:.2f}:1, below the 4.5:1 floor")
+
+# ------------------------------------------------- scripts a doc names must exist
+for rel in shipped + ["SKILL.md"]:
+    txt = read(rel) or ""
+    for script in sorted(set(re.findall(r"(scripts/[A-Za-z0-9_.\-]+\.py)", txt))):
+        if not os.path.exists(os.path.join(ROOT, script)):
+            fail("DOCS", f"{rel} tells the reader to run '{script}', which does not exist")
+
+# ------------------------------- a doc may only name a hex the system actually owns
+DOCUMENTED_HEX = {
+    BRAND_RED, "#414042",                      # locked brand values
+    "#e42526", "#e32726", "#3a3a3c",           # the raster discrepancy, named to warn
+    "#df1c21", "#df1c2f",                      # the corrected and the rejected red, in provenance
+    "#181a1d", "#1d1c1e",                      # retired direction, recorded in provenance
+    "#a3a3a6", "#a8acb1",                      # the reference's duplicate greys, quoted
+}
+for rel in shipped + ["SKILL.md"]:
+    txt = read(rel) or ""
+    for hx in sorted({h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}\b", txt)}):
+        if hx not in DOCUMENTED_HEX:
+            fail("DOCS", f"{rel} names {hx}, which is not a value this system owns or documents")
+
 # ------------------------------------------------------- 6. brand values are locked
 if "#E1261C" not in css:
     fail("BRAND", "locked brand red #E1261C is not recorded in tokens.css")
-if css_tokens.get("--a-5", "").strip() != "oklch(0.577 0.223 27.3)":
-    fail("BRAND", "--a-5 is not the locked brand red oklch(0.577 0.223 27.3)")
+# The literal value is deliberately NOT asserted here. Pinning the string is what let
+# the wrong colour sit in place behind a comment that claimed otherwise. The resolver
+# check above compares the colour, which is the thing that matters.
 if css_tokens.get("--accent", "").strip() != "var(--a-5)":
     fail("BRAND", "--accent no longer points at the locked brand primitive --a-5")
 # --------------------------------------------------------------- 7. assets present
