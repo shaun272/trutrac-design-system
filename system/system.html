@@ -153,7 +153,7 @@ h3.r:first-of-type{margin-top:0}
   font-size:11px;line-height:1.55}
 .sheet .rh{display:flex;align-items:center;justify-content:space-between;
   padding-bottom:var(--s-1);border-bottom:.5px solid var(--paper-rule-2);margin-bottom:7%}
-.sheet .rh img{height:15px}
+.sheet .rh img{height:15px;width:auto;flex:none}
 .sheet .rh span{font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;color:var(--paper-ink-3)}
 .sheet .folio{position:absolute;left:9%;right:9%;bottom:5%;display:flex;justify-content:space-between;
   font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;color:var(--paper-ink-3);
@@ -266,7 +266,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
 .slide{aspect-ratio:16/9;border:1px solid var(--rule-3);padding:7%;display:flex;flex-direction:column;
   position:relative;overflow:hidden;background:var(--paper);color:var(--paper-ink)}
 .slide.dark{background:var(--paper-ink);color:var(--paper-inv)}
-.slide img{height:22px;width:auto}
+.slide img{height:22px;width:auto;flex:none;align-self:flex-start}
 .slide .st{margin-top:auto;font-weight:200;font-size:26px;line-height:1.06;letter-spacing:-.03em}
 .slide .ss{font-size:10px;margin-top:var(--s-2);opacity:.62}
 .slide .sf{position:absolute;left:7%;right:7%;bottom:5%;display:flex;justify-content:space-between;
@@ -428,7 +428,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
 <a class="skip" href="#main">Skip to content</a>
 <div class="gridlines" aria-hidden="true"><div class="base"></div><div class="cols"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
 <header class="bar"><div class="w">
-  <img decoding="async" width="2561" height="671" src="assets/lockup-charcoal.png" alt="Tru-Trac" id="brandmark">
+  <img decoding="async" width="2561" height="671" src="../assets/lockup-charcoal.png" alt="Tru-Trac" id="brandmark">
   <span class="rt">DESIGN SYSTEM · DOCUMENTS, REPORTS, PRESENTATIONS</span>
   <button class="btn btn-2 ib noprint" id="mode" aria-label="Switch to dark mode"><i class="ph ph-moon"></i></button>
   <button class="btn btn-2 noprint" onclick="window.print()">Print preview</button>
@@ -454,26 +454,26 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
   <h3 class="r">Light surfaces</h3>
   <div class="three">
     <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="2561" height="671" src="assets/lockup-charcoal.png" alt="" style="max-width:100%;height:auto"></div>
+      <img decoding="async" width="2561" height="671" src="../assets/lockup-charcoal.png" alt="" style="max-width:100%;height:auto"></div>
       <p class="sheetlbl">lockup-charcoal · default for documents</p></div>
     <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="2561" height="671" src="assets/lockup-red.png" alt="" style="max-width:100%;height:auto"></div>
+      <img decoding="async" width="2561" height="671" src="../assets/lockup-red.png" alt="" style="max-width:100%;height:auto"></div>
       <p class="sheetlbl">lockup-red · covers only</p></div>
     <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:66px;width:auto"></div>
+      <img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="" style="height:66px;width:auto"></div>
       <p class="sheetlbl">mark-charcoal · running heads</p></div>
   </div>
 
   <h3 class="r">Dark surfaces, reverse only</h3>
   <div class="three">
     <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="2561" height="671" src="assets/lockup-red-reverse.png" alt="" style="max-width:100%;height:auto"></div>
+      <img decoding="async" width="2561" height="671" src="../assets/lockup-red-reverse.png" alt="" style="max-width:100%;height:auto"></div>
       <p class="sheetlbl">lockup-red-reverse</p></div>
     <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="" style="max-width:100%;height:auto"></div>
+      <img decoding="async" width="2561" height="671" src="../assets/lockup-white.png" alt="" style="max-width:100%;height:auto"></div>
       <p class="sheetlbl">lockup-white · single colour, over imagery</p></div>
     <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
-      <img decoding="async" width="2772" height="2855" src="assets/mark-red-reverse.png" alt="" style="height:66px;width:auto"></div>
+      <img decoding="async" width="2772" height="2855" src="../assets/mark-red-reverse.png" alt="" style="height:66px;width:auto"></div>
       <p class="sheetlbl">mark-red-reverse</p></div>
   </div>
 
@@ -499,7 +499,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
     <div>
       <div class="sheet cover">
         <div class="band">
-          <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="">
+          <img decoding="async" width="2561" height="671" src="../assets/lockup-white.png" alt="">
           <div class="ttl">APEX Taper Trough Tracker</div>
           <div class="sub">Installation, operation and maintenance manual</div>
         </div>
@@ -509,12 +509,12 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
     </div>
     <div>
       <div class="sheet">
-        <div class="rh"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
+        <div class="rh"><img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
         <div class="sec-no">SECTION 3</div>
         <p class="h">Installation</p>
         <p class="lead">The flight must be locked out before any part of the assembly is offered to the stringer.</p>
         <p>Set the pivot square to the belt centre line before tightening. A unit fitted out of square will correct in one direction only and will present as an intermittent fault.</p>
-        <div class="fig"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:26px"></div>
+        <div class="fig"><img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="" style="height:26px;width:auto"></div>
         <div class="figcap">FIG. 3.1 · GENERAL ARRANGEMENT, CARRY SIDE</div>
         <p>Torque the stringer clamps to 95 Nm in the sequence shown. Re-check after the first eight hours of running.</p>
         <div class="folio"><span>TRU-TRAC ROLLERS (PTY) LTD</span><span>11</span></div>
@@ -523,7 +523,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
     </div>
     <div>
       <div class="sheet">
-        <div class="rh"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
+        <div class="rh"><img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
         <p class="h">Specification</p>
         <table>
           <thead><tr><th>Model</th><th class="n">BW</th><th class="n">Tension</th><th class="n">Mass</th></tr></thead>
@@ -559,7 +559,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
 
   <h3 class="r">Figure and caption</h3>
   <figure style="max-width:560px">
-    <div class="frame"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="Placeholder"></div>
+    <div class="frame"><img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="Placeholder"></div>
     <figcaption><b>FIG. 3.1</b><span>General arrangement, carry side. Placeholder artwork pending the product render.</span></figcaption>
   </figure>
 
@@ -649,7 +649,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
   <div class="slides">
     <div>
       <div class="slide dark">
-        <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="">
+        <img decoding="async" width="2561" height="671" src="../assets/lockup-white.png" alt="">
         <div class="st">Belt tracking that corrects at the point of error</div>
         <div class="ss">Tru-Trac Rollers · Electra Mining 2026</div>
         <div class="sf"><span>TRU-TRAC.COM</span><span>01</span></div>
@@ -658,7 +658,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
     </div>
     <div>
       <div class="slide">
-        <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:20px">
+        <img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="" style="height:20px;width:auto">
         <p class="h" style="margin-top:var(--s-4)">Why belts wander</p>
         <ul>
           <li>Carry-back builds on the return idlers</li>
@@ -672,7 +672,7 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
     </div>
     <div>
       <div class="slide">
-        <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:20px">
+        <img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="" style="height:20px;width:auto">
         <div style="margin-top:auto"><div class="big">31%</div>
           <div style="font-size:10px;margin-top:var(--s-2);opacity:.7;max-width:26ch">of measured drift traces back to carry-back on the return side</div></div>
         <div class="sf"><span>412 FLIGHTS ASSESSED</span><span>07</span></div>
@@ -783,10 +783,10 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
 
   <h3 class="r">Site, full bleed with an overlay</h3>
   <div class="hero-shot">
-    <img width="1600" height="1067" src="assets/img/site-plant.jpg"
+    <img width="1600" height="1067" src="../assets/img/site-plant.jpg"
           alt="Bulk handling plant under low grey cloud, stacks and conveyor gantries against the skyline" loading="lazy">
     <div class="over">
-      <img class="lock" src="assets/lockup-white.png" width="2561" height="671" alt="Tru-Trac">
+      <img class="lock" src="../assets/lockup-white.png" width="2561" height="671" alt="Tru-Trac">
       <h3>Fitted on 412 flights across eighty countries</h3>
       <p>Site photography carries the argument that this equipment lives in real plant. It runs full bleed, hard edges, no radius.</p>
     </div>
@@ -795,22 +795,22 @@ table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-wei
   <h3 class="r">Product, condition and technical</h3>
   <div class="imgrow">
     <div class="imgcell">
-      <div class="box product"><img class="ph-img" width="900" height="601" src="assets/img/site-technician.jpg"
+      <div class="box product"><img class="ph-img" width="900" height="601" src="../assets/img/site-technician.jpg"
          alt="Technician in a hard hat working on a control box mounted to plant steelwork" loading="lazy"></div>
       <p class="cap"><b>SITE</b>People and plant. Proves the work happens where the customer works. 16:9 or 4:3, full bleed where it leads a page.</p>
     </div>
     <div class="imgcell">
-      <div class="box evidence"><img class="ph-img" width="900" height="600" src="assets/img/condition-weld.jpg"
+      <div class="box evidence"><img class="ph-img" width="900" height="600" src="../assets/img/condition-weld.jpg"
          alt="Welding sparks across a dark workshop, operator shielded" loading="lazy"></div>
       <p class="cap"><b>CONDITION</b>Before and after, matched framing, unretouched, dated. Always presented as a pair at 3:2.</p>
     </div>
     <div class="imgcell">
-      <div class="box evidence"><img class="ph-img" width="900" height="599" src="assets/img/technical-drawings.jpg"
+      <div class="box evidence"><img class="ph-img" width="900" height="599" src="../assets/img/technical-drawings.jpg"
          alt="General arrangement drawings laid out on a drawing board with a scale rule" loading="lazy"></div>
       <p class="cap"><b>TECHNICAL</b>Drawings, sections and dimensioned views. The role that carries a handbook.</p>
     </div>
     <div class="imgcell">
-      <div class="box product"><img class="ph-img" width="900" height="707" src="assets/img/application-warehouse.jpg"
+      <div class="box product"><img class="ph-img" width="900" height="707" src="../assets/img/application-warehouse.jpg"
          alt="Long warehouse aisle with racking receding into perspective under strip lighting" loading="lazy"></div>
       <p class="cap"><b>APPLICATION</b>The industry, not the product. Opens a sector section or a proposal.</p>
     </div>
@@ -952,7 +952,7 @@ TORQUE      95 Nm   <span class="c">(dry, unlubricated)</span></pre>
 </div></main>
 
 <footer class="pagefoot"><div class="w">
-  <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" id="footmark">
+  <img decoding="async" width="1152" height="1186" src="../assets/mark-charcoal.png" alt="" id="footmark">
   <span>TRU-TRAC ROLLERS (PTY) LTD · DESIGN SYSTEM · REV D · 2026-08</span>
   <span class="rt">ARCHIVO · JETBRAINS MONO · #E1261C</span>
 </div></footer>
@@ -981,8 +981,8 @@ gt.addEventListener('click',()=>{const r=document.documentElement,on=r.getAttrib
 const mb=document.getElementById('mode'), brand=document.getElementById('brandmark'), fm=document.getElementById('footmark');
 mb.addEventListener('click',()=>{const r=document.documentElement,d=r.getAttribute('data-mode')==='dark';
   r.setAttribute('data-mode',d?'light':'dark');
-  brand.src = d ? 'assets/lockup-charcoal.png' : 'assets/lockup-red-reverse.png';
-  fm.src    = d ? 'assets/mark-charcoal.png'   : 'assets/mark-red-reverse.png';
+  brand.src = d ? '../assets/lockup-charcoal.png' : '../assets/lockup-red-reverse.png';
+  fm.src    = d ? '../assets/mark-charcoal.png'   : '../assets/mark-red-reverse.png';
   mb.innerHTML = d ? '<i class="ph ph-moon"></i>' : '<i class="ph ph-sun"></i>';
   mb.setAttribute('aria-label', d ? 'Switch to dark mode' : 'Switch to light mode')});
 </script>
