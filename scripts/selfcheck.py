@@ -51,6 +51,12 @@ else:
             d = " ".join(desc.group(1).split())
             if len(d) < 120:
                 fail("SKILL", f"description is only {len(d)} chars; too thin to trigger reliably")
+            # Hard platform ceiling. Over this and the skill is rejected at install time,
+            # which is a failure you only discover once, in front of someone.
+            if len(d) > 1024:
+                fail("SKILL", f"description is {len(d)} chars; the ceiling is 1024 and install will fail")
+        if name and len(name.group(1)) > 64:
+            fail("SKILL", f"name is {len(name.group(1))} chars; the ceiling is 64")
             if "Use for" not in d and "Use when" not in d:
                 fail("SKILL", "description states no trigger condition")
 

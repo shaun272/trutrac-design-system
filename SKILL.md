@@ -1,19 +1,17 @@
 ---
 name: trutrac-design-system
 description: >-
-  The approved Tru-Trac design system. Use for ANY Tru-Trac surface built from these tokens:
-  web page, landing page, microsite, HTML dashboard, interactive or dynamic report, internal
-  tool UI, app screen, email template, embedded widget, prototype, Lovable/Figma/React build,
-  and the document and slide objects (A4 sheet, 16:9 slide) that render from the same token
-  file. Owns the colour tokens, type stack, spacing, radii, elevation rules, the twelve-component
-  library, logo usage and the stage/canvas section rhythm. Use when the request says "build a
-  page for", "make a dashboard", "design the site", "style this UI", "does this match our brand",
-  "use our design system", "brand colours", "which red do we use", "put the logo on", or whenever
-  producing HTML, JSX, Vue or Svelte a Tru-Trac audience will see. Also use when reviewing or
-  auditing an existing screen or document for brand compliance.
-  Boundary: the WeasyPrint print pipeline belongs to trutrac-dynamic-reporting and the A4
-  proposal templates to trutrac-proposals. Both consume the tokens defined here. Product motion
-  and CGI belong to trutrac-motion-production.
+  The approved Tru-Trac design system. Use for any Tru-Trac surface built from these tokens: web
+  page, landing page, HTML dashboard, dynamic or interactive report, internal tool UI, app screen,
+  email template, embedded widget, prototype, Lovable/Figma/React build, and the A4 sheet and 16:9
+  slide objects rendered from the same token file. Owns the colour tokens, type stack, spacing,
+  radii, elevation rules, the twelve-component library, logo usage and the stage/canvas section
+  rhythm. Use when the request says "build a page for", "make a dashboard", "style this UI", "does
+  this match our brand", "use our design system", "which red do we use", "put the logo on", or
+  whenever producing HTML, JSX, Vue or Svelte a Tru-Trac audience will see. Also use when auditing
+  an existing screen or document for brand compliance. Boundary: the WeasyPrint pipeline belongs
+  to trutrac-dynamic-reporting, A4 proposals to trutrac-proposals, product motion to trutrac-
+  motion-production. All three use these tokens.
 ---
 
 # Tru-Trac design system
