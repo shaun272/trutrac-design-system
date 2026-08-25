@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en-ZA" data-mode="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tru-Trac Design System — documents, reports, presentations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+/* ══ PRIMITIVES ══ OKLCH. Never referenced by a component. ══ */
+:root{
+  --n-0:oklch(1 0 0);        --n-1:oklch(0.985 0.001 285); --n-2:oklch(0.965 0.002 285);
+  --n-3:oklch(0.935 0.003 285); --n-4:oklch(0.885 0.004 285); --n-5:oklch(0.79 0.005 285);
+  --n-6:oklch(0.66 0.006 285); --n-7:oklch(0.535 0.007 285); --n-8:oklch(0.43 0.007 285);
+  --n-9:oklch(0.345 0.006 285); --n-10:oklch(0.245 0.005 285); --n-11:oklch(0.16 0.004 285);
+  --a-1:oklch(0.96 0.018 27); --a-2:oklch(0.88 0.06 27);  --a-3:oklch(0.70 0.15 27);
+  --a-4:oklch(0.632 0.20 27); --a-5:oklch(0.577 0.223 27.3);  /* #E1261C, locked */
+  --a-6:oklch(0.50 0.19 27);  --a-7:oklch(0.38 0.14 27);
+  --status-ok:oklch(0.52 0.13 152); --status-warn:oklch(0.62 0.13 75); --status-info:oklch(0.52 0.13 250);
+  --font-sans:'Archivo',ui-sans-serif,system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --t-press:110ms; --t-ui:180ms; --t-panel:280ms;
+}
+/* ══ SEMANTIC ══ light is primary: this system prints ══ */
+:root{
+  --page:var(--n-0); --page-tint:var(--n-1); --panel:var(--n-2); --panel-2:var(--n-3);
+  --hover:oklch(0 0 0 /.035);
+  --ink:var(--n-11); --ink-2:var(--n-9); --ink-3:var(--n-7); --ink-4:var(--n-6); --ink-on-dark:oklch(1 0 0);
+  /* Rule weights: one ramp, four jobs. 1 groups inside a block, 2 separates rows
+     and sections, 3 closes a table or frames a quote at 1.5px, 4 is structure. */
+  --rule-1:oklch(0.16 0.004 285 /.08); --rule-2:oklch(0.16 0.004 285 /.14);
+  --rule-3:oklch(0.16 0.004 285 /.30); --rule-4:var(--n-10);
+  /* Paper: the printed-page objects hold fixed ink so they never flip with mode.
+     A sheet is paper whether you are reading it on a dark screen or not. */
+  --paper:var(--n-0); --paper-ink:var(--n-11);
+  --paper-ink-2:oklch(0.16 0.004 285 /.78); --paper-ink-3:oklch(0.16 0.004 285 /.52);
+  --paper-rule-1:oklch(0.16 0.004 285 /.14); --paper-rule-2:oklch(0.16 0.004 285 /.30);
+  --paper-rule-3:oklch(0.16 0.004 285 /.48);
+  --paper-inv:oklch(1 0 0); --paper-inv-2:oklch(1 0 0 /.62);
+  --accent:var(--a-5); --accent-hover:var(--a-6); --accent-tint:oklch(0.577 0.223 27.3 /.09);
+  --accent-focus:var(--a-5);
+  --r-1:2px; --r-2:3px; --r-3:5px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
+  --s-10:40px; --s-12:48px; --s-16:64px; --s-20:80px; --s-24:96px;
+  --layout-tap:44px; --layout-measure:66ch;
+  /* tints and scrims, so no component invents its own alpha */
+  /* tints, edges and scrims, so no component invents its own alpha */
+  --accent-wash:oklch(0.577 0.223 27.3 /.07);
+  --accent-line:oklch(0.577 0.223 27.3 /.16);
+  --accent-edge:oklch(0.577 0.223 27.3 /.55);
+  --status-warn-edge:oklch(0.62 0.13 75 /.5);
+  --spinner-track:oklch(1 0 0 /.35);
+  /* text, scrim and grade over photography */
+  --photo-scrim:oklch(0.16 0.004 285 /.88);
+  --photo-scrim-mid:oklch(0.16 0.004 285 /.25);
+  --photo-ink:oklch(1 0 0);
+  --photo-ink-2:oklch(1 0 0 /.72);
+  --photo-grade:saturate(.72) contrast(1.06) brightness(.97);
+  /* CONVENTION: the type scale is named by ROLE (--f-body, --l-h2) because a
+     document has named text roles. Spacing is named by NUMBER (--s-4) because it
+     is a continuum. This asymmetry is deliberate; do not "fix" one to match the other.
+     Modular scale, ratio 1.25 from a 16px base. Every line-height resolves to a
+     whole multiple of the 8px baseline, so stacked elements never drift. */
+  --f-cap:13px;  --l-cap:24px;    /* 3 units */
+  --f-sm:14px;   --l-sm:24px;     /* 3 */
+  --f-body:16px; --l-body:24px;   /* 3 */
+  --f-lead:20px; --l-lead:32px;   /* 4 */
+  --f-h3:25px;   --l-h3:32px;     /* 4 */
+  --f-h2:31px;   --l-h2:40px;     /* 5 */
+  --f-h1:39px;   --l-h1:48px;     /* 6 */
+  --f-ttl:61px;  --l-ttl:72px;    /* 9 */
+  --layout-base:8px;
+  /* Three rule weights, and they carry meaning */
+  --z-sticky:100; --z-dropdown:200; --z-modal:400; --z-toast:500; --z-tooltip:600;
+}
+[data-mode="dark"]{
+  --page:oklch(0.16 0.004 285); --page-tint:oklch(0.19 0.004 285); --panel:oklch(0.225 0.005 285);
+  --panel-2:oklch(0.27 0.006 285); --hover:oklch(1 0 0 /.05);
+  --ink:oklch(0.94 0.002 285); --ink-2:oklch(0.94 0.002 285 /.74);
+  --ink-3:oklch(0.94 0.002 285 /.54); --ink-4:oklch(0.94 0.002 285 /.36);
+  --rule-1:oklch(0.94 0.002 285 /.07); --rule-2:oklch(0.94 0.002 285 /.13);
+  --rule-3:oklch(0.94 0.002 285 /.26); --rule-4:oklch(0.94 0.002 285 /.5);
+  --accent-hover:var(--a-4); --accent-tint:oklch(0.577 0.223 27.3 /.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:clip}
+body{background:var(--page);color:var(--ink);font-family:var(--font-sans);
+  font-size:var(--f-body);line-height:var(--l-body);
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  font-variant-numeric:proportional-nums;      /* prose gets proportional figures */
+  -webkit-font-smoothing:antialiased;overflow-x:clip;
+  print-color-adjust:exact;-webkit-print-color-adjust:exact}
+/* data contexts switch to tabular so columns align */
+td.n,td.k,.t-data,.t-ref,.specs dd,.kpi .v,.revblock .mono,.bars .p,table.doc{font-variant-numeric:tabular-nums}
+section{scroll-margin-top:76px}                /* clears the sticky bar on anchor jumps */
+:where(a,button,summary,[role=button]){cursor:pointer}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent-focus);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:999;background:var(--accent);color:var(--paper-inv);
+  padding:12px 20px;font-weight:500;font-size:14px;border-radius:0 0 var(--r-2) 0}
+.skip:focus{left:0}
+.w{width:100%;max-width:1180px;margin-inline:auto;padding-inline:var(--s-6);min-width:0}
+.ph{line-height:1;display:inline-block}
+a{color:inherit}
+
+/* ══ DOCUMENT TYPE SCALE ══ tuned for reading, not for a hero ══ */
+.t-title{font-weight:200;font-size:clamp(34px,4.6vw,var(--f-ttl));line-height:var(--l-ttl);letter-spacing:-.032em;text-wrap:balance}
+.t-h1{font-weight:300;font-size:clamp(27px,3vw,var(--f-h1));line-height:var(--l-h1);letter-spacing:-.022em;text-wrap:balance}
+.t-h2{font-weight:500;font-size:var(--f-h2);line-height:var(--l-h2);letter-spacing:-.015em;text-wrap:balance}
+.t-h3{font-weight:600;font-size:var(--f-h3);line-height:var(--l-h3);letter-spacing:-.008em}
+.t-body{font-size:var(--f-body);line-height:var(--l-body);max-width:var(--layout-measure);text-wrap:pretty;
+  hanging-punctuation:first last;hyphens:auto;orphans:3;widows:3}
+p,li,dd{orphans:3;widows:3}
+.t-sm{font-size:var(--f-sm);line-height:var(--l-sm)}
+.t-cap{font-size:var(--f-cap);line-height:var(--l-cap);color:var(--ink-3)}
+.t-data{font-family:var(--font-mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.t-ref{font-family:var(--font-mono);font-weight:400;font-size:11.5px;letter-spacing:.05em;color:var(--ink-4)}
+.mut{color:var(--ink-2)} .qt{color:var(--ink-3)}
+code{font-family:var(--font-mono);font-size:.87em;color:var(--ink-2);background:var(--panel);padding:1px 5px;border-radius:var(--r-1)}
+
+/* ══ PAGE CHROME ══ */
+.bar{position:sticky;top:0;z-index:var(--z-sticky);background:color-mix(in oklch,var(--page) 90%,transparent);
+  backdrop-filter:blur(18px);border-bottom:1px solid var(--rule-2)}
+.bar .w{display:flex;align-items:center;gap:var(--s-4);min-height:60px}
+.bar img{height:34px;width:auto;display:block}
+.pagefoot{border-top:1.5px solid var(--rule-3);padding-block:var(--s-8);margin-top:var(--s-16)}
+.pagefoot .w{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-4);
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;color:var(--ink-4)}
+.pagefoot img{height:26px;width:auto}
+.pagefoot .rt{margin-left:auto}
+.bar .rt{margin-left:auto;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;color:var(--ink-4)}
+section{padding-block:var(--s-20)}
+section+section{border-top:1px solid var(--rule-2)}
+main{display:block}
+.hd{margin-bottom:var(--s-10);max-width:var(--layout-measure)}
+.hd p{font-size:16px;color:var(--ink-2);margin-top:var(--s-3)}
+h3.r{font-weight:600;font-size:13.5px;line-height:24px;color:var(--ink-3);margin:var(--s-12) 0 var(--s-5);
+  padding-bottom:var(--s-2);border-bottom:1px solid var(--rule-1)}
+h3.r:first-of-type{margin-top:0}
+.note-inline{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-3);margin-top:var(--s-3)}
+.note-inline .ph{font-size:15px;flex:none;margin-top:1px}
+
+/* ══ THE PAGE OBJECT ══ the unit this system is really about ══ */
+.sheet{background:var(--paper);color:var(--paper-ink);border:1px solid var(--rule-3);
+  aspect-ratio:210/297;padding:9%;display:flex;flex-direction:column;position:relative;overflow:hidden;
+  font-size:11px;line-height:1.55}
+.sheet .rh{display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:var(--s-1);border-bottom:.5px solid var(--paper-rule-2);margin-bottom:7%}
+.sheet .rh img{height:15px}
+.sheet .rh span{font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;color:var(--paper-ink-3)}
+.sheet .folio{position:absolute;left:9%;right:9%;bottom:5%;display:flex;justify-content:space-between;
+  font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;color:var(--paper-ink-3);
+  border-top:.5px solid var(--paper-rule-1);padding-top:5px}
+.sheet .h{font-weight:600;font-size:13px;letter-spacing:-.01em;margin-bottom:5px}
+.sheet p{font-size:7.5px;line-height:1.62;color:var(--paper-ink-2);margin-bottom:var(--s-1)}
+.sheet .lead{font-size:9px;line-height:1.5;margin-bottom:var(--s-2)}
+.sheet .sec-no{font-family:var(--font-mono);font-size:7px;color:var(--accent);letter-spacing:.06em;margin-bottom:var(--s-1)}
+.sheet .fig{background:var(--page-tint);border:.5px solid var(--paper-rule-1);aspect-ratio:16/9;
+  display:grid;place-items:center;margin-block:6px 4px}
+.sheet .figcap{font-family:var(--font-mono);font-size:6px;letter-spacing:.05em;color:var(--paper-ink-3);margin-bottom:var(--s-2)}
+.sheet table{width:100%;border-collapse:collapse;font-size:6.5px;margin-bottom:var(--s-1)}
+.sheet th{text-align:left;padding:3px 4px;border-bottom:.5px solid var(--paper-rule-3);
+  font-weight:600;font-size:6px;color:var(--paper-ink-3)}
+.sheet td{padding:3px 4px;border-bottom:.5px solid var(--paper-rule-1)}
+.sheet td.n{font-family:var(--font-mono);text-align:right}
+.sheet.cover{padding:0;justify-content:flex-end}
+.sheet.cover .band{background:var(--paper-ink);color:var(--paper-inv);padding:9%;flex:1;display:flex;flex-direction:column}
+.sheet.cover img{height:30px;width:auto;align-self:flex-start}
+.sheet.cover .ttl{margin-top:auto;font-weight:200;font-size:26px;line-height:1.04;letter-spacing:-.03em}
+.sheet.cover .sub{font-size:8.5px;color:var(--paper-inv-2);margin-top:var(--s-2)}
+.sheet.cover .foot{padding:6% 9%;display:flex;justify-content:space-between;
+  font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;color:var(--paper-ink-3)}
+.sheets{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:var(--s-5);min-width:0}
+.sheetlbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;color:var(--ink-4);margin-top:var(--s-3)}
+/* ══ DOCUMENT COMPONENTS ══ */
+.toc{border-top:1px solid var(--rule-3);max-width:640px}
+.toc a{display:flex;align-items:baseline;gap:var(--s-3);padding:var(--s-3) 0;border-bottom:1px solid var(--rule-2);
+  text-decoration:none;transition:background var(--t-ui) var(--ease-out)}
+.toc a:hover{background:var(--hover)}
+.toc .no{font-family:var(--font-mono);font-size:12px;color:var(--accent);min-width:32px}
+.toc .ttl{font-weight:500;font-size:15px}
+.toc .dots{flex:1;border-bottom:1px dotted var(--rule-3);transform:translateY(-4px)}
+.toc .pg{font-family:var(--font-mono);font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+figure{margin-block:var(--s-6)}
+figure .frame{background:var(--panel);border:1px solid var(--rule-2);display:grid;place-items:center;
+  aspect-ratio:16/9;overflow:hidden}
+figure .frame img{max-width:44%;height:auto}
+figcaption{display:flex;gap:var(--s-3);margin-top:var(--s-3);font-size:13px;color:var(--ink-3);
+  padding-top:var(--s-2);border-top:1px solid var(--rule-2);max-width:var(--layout-measure)}
+figcaption b{font-family:var(--font-mono);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--ink-2);flex:none}
+
+table.doc{width:100%;border-collapse:collapse;font-size:14px}
+table.doc caption{text-align:left;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;
+  color:var(--ink-3);padding-bottom:var(--s-3)}
+table.doc th.ra{text-align:right}
+table.doc th.ra .sortbtn{margin-left:auto}
+.sortbtn{display:flex;align-items:center;gap:var(--s-1);min-height:var(--layout-tap);background:none;border:0;padding:0;
+  font:inherit;color:inherit;letter-spacing:inherit}
+.sortbtn .ph{font-size:13px;opacity:.55}
+.sortbtn:hover .ph{opacity:1}
+table.doc thead th{position:sticky;top:60px;background:var(--page);z-index:2}
+table.doc th{text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.02em;color:var(--ink-2);
+  padding:10px 12px;border-bottom:1.5px solid var(--rule-4);white-space:nowrap}
+table.doc td{padding:var(--s-3) 12px;border-bottom:1px solid var(--rule-2)}
+table.doc tbody tr:nth-child(even){background:var(--page-tint)}
+table.doc td.n{font-family:var(--font-mono);font-weight:400;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.doc td.k{font-family:var(--font-mono);font-weight:500;white-space:nowrap}
+table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-weight:600;padding-top:var(--s-3)}
+.tw{overflow-x:auto;max-width:100%} .tw table{min-width:560px}
+
+/* admonitions: full border, never a side stripe */
+.adm{display:flex;gap:var(--s-3);padding:var(--s-4);border:1px solid var(--rule-3);border-radius:var(--r-2);
+  background:var(--page-tint);font-size:14px;max-width:var(--layout-measure)}
+.adm+.adm{margin-top:var(--s-3)}
+.adm .ph{font-size:19px;flex:none;margin-top:1px}
+.adm b{display:block;font-weight:600;font-size:12.5px;letter-spacing:.05em;margin-bottom:var(--s-1)}
+.adm p{color:var(--ink-2)}
+.adm.note b{color:var(--status-info)} .adm.note .ph{color:var(--status-info)}
+.adm.caution{border-color:var(--status-warn-edge)} .adm.caution b,.adm.caution .ph{color:var(--status-warn)}
+.adm.warning{border-color:var(--accent-edge);background:var(--accent-tint)}
+.adm.warning b,.adm.warning .ph{color:var(--accent)}
+
+.specs{border-top:1.5px solid var(--rule-4);max-width:640px}
+.specs div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--s-4);
+  padding:var(--s-2) 0;border-bottom:1px solid var(--rule-2)}
+.specs dt{font-size:14px;color:var(--ink-2)}
+.specs dd{font-family:var(--font-mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums}
+
+.revblock{border:1px solid var(--rule-3);border-radius:var(--r-2);overflow:hidden;max-width:640px}
+.revblock .rt{display:grid;grid-template-columns:52px 92px 1fr 68px;font-size:13px}
+.revblock .rt>*{padding:var(--s-2) 12px;border-bottom:1px solid var(--rule-2)}
+.revblock .hdr>*{background:var(--panel);font-weight:600;font-size:11.5px;letter-spacing:.05em;color:var(--ink-3)}
+.revblock .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+
+/* report */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;
+  border:1px solid var(--rule-2);min-width:0}
+.kpi{padding:var(--s-5) var(--s-6);border-right:1px solid var(--rule-2);min-width:0}
+.kpi:last-child{border-right:0}
+.kpi .v{font-weight:200;font-size:38px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .v.hot{color:var(--accent)}
+.kpi .k{font-size:12.5px;color:var(--ink-3);margin-top:var(--s-2)}
+.kpi .d{display:flex;align-items:center;gap:var(--s-1);font-family:var(--font-mono);font-size:11.5px;margin-top:var(--s-1)}
+.kpi .d .ph{font-size:14px}
+.kpi .d.up{color:var(--status-ok)} .kpi .d.dn{color:var(--accent)}
+.finding{border-left:0;border:1px solid var(--rule-2);border-radius:var(--r-2);padding:var(--s-5);max-width:var(--layout-measure)}
+.finding .top{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-3)}
+.finding .ref{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;color:var(--ink-4)}
+.bars{display:flex;flex-direction:column;gap:var(--s-2);max-width:520px}
+.bars .b{display:grid;grid-template-columns:130px 1fr 52px;gap:var(--s-3);align-items:center;font-size:13.5px}
+.bars .t{height:7px;background:var(--panel-2);position:relative;overflow:hidden}
+.bars .t i{position:absolute;inset:0 auto 0 0;background:var(--ink-3);transition:width 700ms var(--ease-out)}
+.bars .b.hot .t i{background:var(--accent)}
+.bars .p{font-family:var(--font-mono);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+
+/* presentation */
+.slides{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s-5);min-width:0}
+.slide{aspect-ratio:16/9;border:1px solid var(--rule-3);padding:7%;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;background:var(--paper);color:var(--paper-ink)}
+.slide.dark{background:var(--paper-ink);color:var(--paper-inv)}
+.slide img{height:22px;width:auto}
+.slide .st{margin-top:auto;font-weight:200;font-size:26px;line-height:1.06;letter-spacing:-.03em}
+.slide .ss{font-size:10px;margin-top:var(--s-2);opacity:.62}
+.slide .sf{position:absolute;left:7%;right:7%;bottom:5%;display:flex;justify-content:space-between;
+  font-family:var(--font-mono);font-size:6.5px;letter-spacing:.07em;opacity:.5}
+.slide .h{font-weight:600;font-size:13px;letter-spacing:-.01em;margin-bottom:var(--s-2)}
+.slide ul{list-style:none;font-size:9px;line-height:1.75;opacity:.8}
+.slide ul li{padding-left:var(--s-3);position:relative}
+.slide ul li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:1.5px;background:var(--accent)}
+.slide .big{font-weight:200;font-size:52px;line-height:1;letter-spacing:-.04em;color:var(--accent)}
+
+/* controls */
+.btn{font-family:var(--font-sans);font-weight:500;font-size:14px;min-height:var(--layout-tap);display:inline-flex;
+  align-items:center;justify-content:center;gap:var(--s-2);padding:0 20px;border:1px solid transparent;
+  border-radius:var(--r-2);background:transparent;color:var(--ink);cursor:pointer;white-space:nowrap;
+  transition:background var(--t-ui) var(--ease-out),border-color var(--t-ui) var(--ease-out),transform var(--t-press) var(--ease-out)}
+.btn:active{transform:scale(.975)}
+.btn:focus-visible{outline:2px solid var(--accent-focus);outline-offset:2px;transition:none}
+.btn-1{background:var(--accent);color:var(--paper-inv)} .btn-1:hover{background:var(--accent-hover)}
+.btn-2{border-color:var(--rule-3)} .btn-2:hover{background:var(--hover);border-color:var(--ink-4)}
+.ib{width:var(--layout-tap);height:var(--layout-tap);padding:0}
+.btn-1[disabled],.btn-2[disabled]{background:var(--panel);border-color:transparent;color:var(--ink-4);
+  cursor:not-allowed;transform:none}
+.btn.busy{color:transparent;pointer-events:none}
+.btn.busy::after{content:"";position:absolute;width:15px;height:15px;border:1.8px solid var(--spinner-track);
+  border-top-color:var(--paper-inv);border-radius:50%;animation:spin .68s linear infinite}
+.btn-2.busy::after{border-color:var(--rule-3);border-top-color:var(--ink-2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn{position:relative}
+/* form */
+.f{display:flex;flex-direction:column;gap:var(--s-1);width:100%;min-width:0}
+.f>label{font-weight:600;font-size:13px;color:var(--ink-2)}
+.f>label .req{color:var(--accent);margin-left:2px}
+.in{width:100%;min-height:var(--layout-tap);background:var(--page);border:1px solid var(--rule-3);
+  border-radius:var(--r-2);padding:0 12px;font-family:var(--font-sans);font-size:15px;color:var(--ink);
+  transition:border-color var(--t-ui) var(--ease-out)}
+.in::placeholder{color:var(--ink-4)}
+.in:hover{border-color:var(--ink-4)}
+.in:focus{outline:none;border-color:var(--accent-focus);box-shadow:0 0 0 3px var(--accent-tint);transition:none}
+.in[disabled]{background:var(--panel);color:var(--ink-4);cursor:not-allowed}
+.in[readonly]{background:var(--page-tint);border-style:dashed}
+.in.bad{border-color:var(--accent)}
+.hlp{display:flex;gap:var(--s-1);align-items:flex-start;font-size:12.5px;line-height:20px;color:var(--ink-3)}
+.hlp.bad{color:var(--accent)} .hlp .ph{font-size:14px;flex:none;margin-top:3px}
+.ck{display:inline-flex;align-items:center;gap:var(--s-3);cursor:pointer;font-size:15px;min-height:var(--layout-tap)}
+.ck input{position:absolute;opacity:0;width:0;height:0}
+.bx{width:19px;height:19px;flex:none;border:1.5px solid var(--rule-3);border-radius:var(--r-1);
+  display:grid;place-items:center;transition:background var(--t-ui) var(--ease-out),border-color var(--t-ui) var(--ease-out)}
+.bx .ph{font-size:13px;color:var(--paper-inv);opacity:0;transform:scale(.6);
+  transition:opacity 150ms var(--ease-out),transform 200ms var(--ease-spring)}
+.ck input:checked+.bx{background:var(--accent);border-color:var(--accent)}
+.ck input:checked+.bx .ph{opacity:1;transform:scale(1)}
+.ck input:focus-visible+.bx{outline:2px solid var(--accent-focus);outline-offset:3px}
+.states{width:100%;border-collapse:collapse;font-size:13.5px}
+.states th{text-align:left;font-weight:600;font-size:12.5px;color:var(--ink-3);padding:10px 12px;
+  border-bottom:1.5px solid var(--rule-3);white-space:nowrap}
+.states td{padding:12px;border-bottom:1px solid var(--rule-1);vertical-align:middle}
+.emptystate{border:1px dashed var(--rule-3);padding:var(--s-10) var(--s-6);text-align:center;background:var(--page-tint)}
+.emptystate .ph{font-size:30px;color:var(--ink-4);display:block;margin-bottom:var(--s-4)}
+.emptystate p{font-size:var(--f-sm);color:var(--ink-3);max-width:40ch;margin:6px auto var(--s-5)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:var(--s-8);min-width:0}
+.three{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:var(--s-6);min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:var(--s-3);align-items:center}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(76px,1fr));gap:2px}
+.swatches div{height:76px;display:flex;align-items:flex-end;padding:var(--s-2);font-family:var(--font-mono);font-size:10px}
+
+/* ══ IMAGERY ══ one tonal grade across the whole system ══ */
+.ph-img{display:block;width:100%;height:auto;object-fit:cover;
+  filter:var(--photo-grade)}
+.imgrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:var(--s-4);min-width:0}
+.imgcell{min-width:0}
+.imgcell .box{overflow:hidden;background:var(--panel);border:1px solid var(--rule-1)}
+.imgcell .box.evidence{aspect-ratio:3/2}
+.imgcell .box.product{aspect-ratio:4/3}
+.imgcell .box img{width:100%;height:100%;object-fit:cover}
+.imgcell .cap{display:flex;gap:var(--s-3);margin-top:var(--s-3);font-size:var(--f-cap);
+  line-height:var(--l-cap);color:var(--ink-3)}
+.imgcell .cap b{font-family:var(--font-mono);font-weight:500;font-size:11.5px;letter-spacing:.05em;
+  color:var(--accent);flex:none}
+.hero-shot{position:relative;overflow:hidden;aspect-ratio:21/9;background:var(--n-11)}
+.hero-shot > img{width:100%;height:100%;object-fit:cover;opacity:.62;
+  filter:saturate(.55) contrast(1.12) brightness(.72)}
+.hero-shot .over{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(20px,4vw,48px);
+  background:linear-gradient(to top,var(--photo-scrim) 0%,var(--photo-scrim-mid) 55%,transparent 100%)}
+.hero-shot .over .lock{width:auto!important;max-width:none;height:34px;opacity:1;filter:none;
+  object-fit:contain;margin-bottom:auto;align-self:flex-start}
+.hero-shot .over h3{color:var(--photo-ink);font-weight:200;font-size:clamp(22px,3.4vw,40px);
+  line-height:1.1;letter-spacing:-.03em;max-width:18ch}
+.hero-shot .over p{color:var(--photo-ink-2);font-size:var(--f-sm);margin-top:var(--s-3);max-width:44ch}
+
+/* ══ GRID PROOF ══ */
+.gridlines{position:fixed;inset:0;z-index:900;pointer-events:none;opacity:0;transition:opacity 200ms var(--ease-out)}
+[data-grid="on"] .gridlines{opacity:1}
+.gridlines .base{position:absolute;inset:0;
+  background:repeating-linear-gradient(to bottom,var(--accent-line) 0 1px,transparent 1px 8px)}
+.gridlines .cols{position:absolute;inset:0;max-width:1180px;margin-inline:auto;padding-inline:var(--s-6);
+  display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s-6)}
+.gridlines .cols span{background:var(--accent-wash)}
+
+/* ══ EDITORIAL COMPONENTS ══ */
+/* tabbed disclosure */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule-2);position:relative;flex-wrap:wrap}
+.tb{font-family:var(--font-sans);font-weight:500;font-size:14px;color:var(--ink-3);background:none;border:0;
+  padding:0 var(--s-4);min-height:var(--layout-tap);cursor:pointer;transition:color var(--t-ui) var(--ease-out)}
+.tb:hover{color:var(--ink-2)} .tb[aria-selected="true"]{color:var(--ink)}
+.tabink{position:absolute;bottom:-1px;height:2px;background:var(--accent);
+  transition:transform var(--t-panel) var(--ease-out),width var(--t-panel) var(--ease-out)}
+.tabpane{padding-top:var(--s-5);font-size:var(--f-body);line-height:var(--l-body);
+  color:var(--ink-2);max-width:var(--layout-measure)}
+.pull{border-top:1.5px solid var(--rule-4);border-bottom:1.5px solid var(--rule-4);
+  padding-block:var(--s-6);margin-block:var(--s-8);max-width:34rem}
+.pull{max-width:32rem}
+.pull p{font-weight:300;font-size:var(--f-h3);line-height:var(--l-h3);letter-spacing:-.012em;text-wrap:balance}
+.pull cite{display:block;font-style:normal;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;
+  color:var(--ink-4);margin-top:var(--s-4)}
+.sidenoted{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:var(--s-8);align-items:start}
+.sidenote{font-size:var(--f-cap);line-height:var(--l-cap);color:var(--ink-3);
+  padding-top:6px;border-top:1px solid var(--rule-1)}
+.sidenote b{display:block;font-family:var(--font-mono);font-weight:500;font-size:11px;letter-spacing:.05em;
+  color:var(--accent);margin-bottom:var(--s-1)}
+.fn{counter-reset:fn}
+.fn sup{font-family:var(--font-mono);font-size:10px;color:var(--accent);vertical-align:super;line-height:0}
+.fnlist{border-top:1px solid var(--rule-1);margin-top:var(--s-6);padding-top:var(--s-4);max-width:34rem}
+.fnlist li{display:grid;grid-template-columns:22px 1fr;gap:var(--s-2);font-size:var(--f-cap);
+  line-height:var(--l-cap);color:var(--ink-3);list-style:none}
+.fnlist li span:first-child{font-family:var(--font-mono);color:var(--accent)}
+.pbreak{display:flex;align-items:center;gap:var(--s-3);margin-block:var(--s-6);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--ink-4)}
+.pbreak::before,.pbreak::after{content:"";flex:1;border-top:1px dashed var(--rule-3)}
+.codeblock{font-family:var(--font-mono);font-size:12.5px;line-height:24px;background:var(--panel);
+  border:1px solid var(--rule-1);border-left:1px solid var(--rule-1);padding:var(--s-4) var(--s-5);
+  overflow-x:auto;max-width:34rem}
+.codeblock .c{color:var(--ink-4)}
+
+/* ══ PRINT ══ this is the point of the system ══ */
+@media print{
+  @page{size:A4;margin:22mm 20mm 20mm}
+  @page{ @top-left{content:"Tru-Trac"} @bottom-right{content:counter(page)} }
+  html,body{background:var(--paper);color:var(--paper-ink);font-size:10.5pt;line-height:1.5}
+  .bar,.noprint,button{display:none!important}
+  section{padding-block:0;border:0;break-inside:auto}
+  .hd{margin-bottom:8mm}
+  h4.r,.t-h1,.t-h2,.t-h3{break-after:avoid-page}
+  figure,table,.adm,.sheet,.slide,.kpi{break-inside:avoid}
+  p,li{orphans:3;widows:3}
+  a{text-decoration:none;color:inherit}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-family:var(--font-mono);font-size:8pt;color:var(--ink-3)}
+  .sheets,.slides,.two,.three{display:block}
+  .tw{overflow:visible}
+}
+@media(max-width:400px){.w{padding-inline:var(--s-4)}body{font-size:15px}}
+@media(max-width:900px){.kpi{border-right:0;border-bottom:1px solid var(--rule-2)}
+  .revblock .rt{grid-template-columns:44px 78px 1fr 58px;font-size:12px}
+  .bars .b{grid-template-columns:100px 1fr 46px}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="gridlines" aria-hidden="true"><div class="base"></div><div class="cols"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+<header class="bar"><div class="w">
+  <img decoding="async" width="2561" height="671" src="assets/lockup-charcoal.png" alt="Tru-Trac" id="brandmark">
+  <span class="rt">DESIGN SYSTEM · DOCUMENTS, REPORTS, PRESENTATIONS</span>
+  <button class="btn btn-2 ib noprint" id="mode" aria-label="Switch to dark mode"><i class="ph ph-moon"></i></button>
+  <button class="btn btn-2 noprint" onclick="window.print()">Print preview</button>
+</div></header>
+
+<main id="main"><div class="w">
+
+<section>
+  <h1 class="t-title" style="max-width:20ch">One system for everything Tru-Trac puts on a page.</h1>
+  <p class="t-body mut" style="margin-top:var(--s-5)">Reports and dynamic HTML reports, PDF documents,
+  proposals, technical documents, product handbooks, presentations and web pages. Light is the primary
+  surface because most of this prints. Dark is a mode, not the default.</p>
+  <div class="row" style="margin-top:var(--s-8)">
+    <span class="t-ref">A4 · 22 / 20 / 20 mm · ARCHIVO · JETBRAINS MONO · #E1261C</span>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Logo</h2>
+    <p>Ten official assets. The wordmark is drawn artwork with a registered mark, so it is never
+    typeset as a substitute. Every supplied file is a knockout, which is why the reverse variants exist.</p></div>
+
+  <h3 class="r">Light surfaces</h3>
+  <div class="three">
+    <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="2561" height="671" src="assets/lockup-charcoal.png" alt="" style="max-width:100%;height:auto"></div>
+      <p class="sheetlbl">lockup-charcoal · default for documents</p></div>
+    <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="2561" height="671" src="assets/lockup-red.png" alt="" style="max-width:100%;height:auto"></div>
+      <p class="sheetlbl">lockup-red · covers only</p></div>
+    <div><div style="background:var(--n-0);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:66px;width:auto"></div>
+      <p class="sheetlbl">mark-charcoal · running heads</p></div>
+  </div>
+
+  <h3 class="r">Dark surfaces, reverse only</h3>
+  <div class="three">
+    <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="2561" height="671" src="assets/lockup-red-reverse.png" alt="" style="max-width:100%;height:auto"></div>
+      <p class="sheetlbl">lockup-red-reverse</p></div>
+    <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="" style="max-width:100%;height:auto"></div>
+      <p class="sheetlbl">lockup-white · single colour, over imagery</p></div>
+    <div><div style="background:var(--n-11);border:1px solid var(--rule-2);padding:var(--s-6);display:grid;place-items:center;min-height:120px">
+      <img decoding="async" width="2772" height="2855" src="assets/mark-red-reverse.png" alt="" style="height:66px;width:auto"></div>
+      <p class="sheetlbl">mark-red-reverse</p></div>
+  </div>
+
+  <div class="adm warning" style="margin-top:var(--s-8)">
+    <i class="ph ph-warning"></i>
+    <span><b>DO NOT SAMPLE COLOUR FROM A LOGO FILE</b>
+    <p>The supplied rasters carry <code>#e42526</code> and <code>#e32726</code> for red and
+    <code>#3a3a3c</code> for charcoal. The locked tokens are <code>#E1261C</code> and <code>#414042</code>.
+    They are close and they are not the same. The rasters are artwork, not a palette.</p></span>
+  </div>
+  <div class="adm note">
+    <i class="ph ph-info"></i>
+    <span><b>OPEN ITEM</b><p>All ten are rasters. Comfortable to about 850 px on screen at 2× and 75 mm
+    at 300 dpi. A vector master with white counterforms should replace them when the brand pack is next opened.</p></span>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">The page</h2>
+    <p>The unit this system is actually about. Cover, section opener, specification page, running head and folio.
+    Every page carries the mark, a document reference and a page number, because these documents circulate detached from their covers.</p></div>
+  <div class="sheets">
+    <div>
+      <div class="sheet cover">
+        <div class="band">
+          <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="">
+          <div class="ttl">APEX Taper Trough Tracker</div>
+          <div class="sub">Installation, operation and maintenance manual</div>
+        </div>
+        <div class="foot"><span>TT-APX-IOM-01</span><span>REV C · 2026-08</span></div>
+      </div>
+      <p class="sheetlbl">Cover</p>
+    </div>
+    <div>
+      <div class="sheet">
+        <div class="rh"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
+        <div class="sec-no">SECTION 3</div>
+        <p class="h">Installation</p>
+        <p class="lead">The flight must be locked out before any part of the assembly is offered to the stringer.</p>
+        <p>Set the pivot square to the belt centre line before tightening. A unit fitted out of square will correct in one direction only and will present as an intermittent fault.</p>
+        <div class="fig"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:26px"></div>
+        <div class="figcap">FIG. 3.1 · GENERAL ARRANGEMENT, CARRY SIDE</div>
+        <p>Torque the stringer clamps to 95 Nm in the sequence shown. Re-check after the first eight hours of running.</p>
+        <div class="folio"><span>TRU-TRAC ROLLERS (PTY) LTD</span><span>11</span></div>
+      </div>
+      <p class="sheetlbl">Section opener</p>
+    </div>
+    <div>
+      <div class="sheet">
+        <div class="rh"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt=""><span>TT-APX-IOM-01 · REV C</span></div>
+        <p class="h">Specification</p>
+        <table>
+          <thead><tr><th>Model</th><th class="n">BW</th><th class="n">Tension</th><th class="n">Mass</th></tr></thead>
+          <tbody>
+            <tr><td>TT-APX-TT-0900</td><td class="n">900</td><td class="n">42 kN</td><td class="n">64 kg</td></tr>
+            <tr><td>TT-APX-TT-1200</td><td class="n">1200</td><td class="n">58 kN</td><td class="n">91 kg</td></tr>
+            <tr><td>TT-APX-TT-1500</td><td class="n">1500</td><td class="n">76 kN</td><td class="n">118 kg</td></tr>
+            <tr><td>TT-APX-TT-1800</td><td class="n">1800</td><td class="n">94 kN</td><td class="n">149 kg</td></tr>
+            <tr><td>TT-APX-TT-2400</td><td class="n">2400</td><td class="n">128 kN</td><td class="n">186 kg</td></tr>
+          </tbody>
+        </table>
+        <p>Dimensions in millimetres unless stated. Mass excludes the belt.</p>
+        <div class="folio"><span>TRU-TRAC ROLLERS (PTY) LTD</span><span>12</span></div>
+      </div>
+      <p class="sheetlbl">Data page</p>
+    </div>
+  </div>
+  <p class="note-inline"><i class="ph ph-info"></i>Sample data throughout. None of these figures is a published Tru-Trac specification.</p>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Document components</h2>
+    <p>The parts every Tru-Trac document is assembled from.</p></div>
+
+  <h3 class="r">Contents</h3>
+  <nav class="toc">
+    <a href="#"><span class="no">1</span><span class="ttl">Scope and application</span><span class="dots"></span><span class="pg">3</span></a>
+    <a href="#"><span class="no">2</span><span class="ttl">Safety</span><span class="dots"></span><span class="pg">6</span></a>
+    <a href="#"><span class="no">3</span><span class="ttl">Installation</span><span class="dots"></span><span class="pg">11</span></a>
+    <a href="#"><span class="no">4</span><span class="ttl">Commissioning and adjustment</span><span class="dots"></span><span class="pg">19</span></a>
+    <a href="#"><span class="no">5</span><span class="ttl">Maintenance schedule</span><span class="dots"></span><span class="pg">24</span></a>
+  </nav>
+
+  <h3 class="r">Figure and caption</h3>
+  <figure style="max-width:560px">
+    <div class="frame"><img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="Placeholder"></div>
+    <figcaption><b>FIG. 3.1</b><span>General arrangement, carry side. Placeholder artwork pending the product render.</span></figcaption>
+  </figure>
+
+  <h3 class="r">Admonitions</h3>
+  <div class="adm note"><i class="ph ph-info"></i><span><b>NOTE</b>
+    <p>Torque figures assume dry, unlubricated fasteners. Reduce by 20 percent if anti-seize is applied.</p></span></div>
+  <div class="adm caution"><i class="ph ph-warning-circle"></i><span><b>CAUTION</b>
+    <p>Do not use the guide roller as a lifting point. The linkage is not rated for the mass of the assembly.</p></span></div>
+  <div class="adm warning"><i class="ph ph-warning"></i><span><b>WARNING</b>
+    <p>Lock out and tag the drive before any part of the assembly is offered to the stringer. Contact with a moving belt causes serious injury.</p></span></div>
+
+  <h3 class="r">Specification list and revision block</h3>
+  <div class="two">
+    <dl class="specs">
+      <div><dt>Belt width range</dt><dd>900 to 2400 mm</dd></div>
+      <div><dt>Maximum belt tension</dt><dd>128 kN</dd></div>
+      <div><dt>Trough angle</dt><dd>35° / 45°</dd></div>
+      <div><dt>Pivot travel</dt><dd>±9°</dd></div>
+      <div><dt>Clamp torque</dt><dd>95 Nm</dd></div>
+    </dl>
+    <div class="revblock">
+      <div class="rt hdr"><span>REV</span><span>DATE</span><span>DESCRIPTION</span><span>BY</span></div>
+      <div class="rt"><span class="mono">C</span><span class="mono">2026-08</span><span>Torque table corrected</span><span class="mono">TT ENG</span></div>
+      <div class="rt"><span class="mono">B</span><span class="mono">2026-03</span><span>2400 mm variant added</span><span class="mono">TT ENG</span></div>
+      <div class="rt" style="border-bottom:0"><span class="mono">A</span><span class="mono">2025-11</span><span>First issue</span><span class="mono">TT ENG</span></div>
+    </div>
+  </div>
+
+  <h3 class="r">Data table</h3>
+  <div class="tw"><table class="doc">
+    <caption>Table 1 · APEX taper trough tracker, carry side</caption>
+    <thead><tr>
+      <th aria-sort="ascending"><button class="sortbtn" type="button">Model <i class="ph ph-arrow-up"></i></button></th>
+      <th class="ra" aria-sort="none"><button class="sortbtn" type="button">Belt width <i class="ph ph-arrows-down-up"></i></button></th>
+      <th class="ra" aria-sort="none"><button class="sortbtn" type="button">Max tension <i class="ph ph-arrows-down-up"></i></button></th>
+      <th class="ra" aria-sort="none"><button class="sortbtn" type="button">Frame height <i class="ph ph-arrows-down-up"></i></button></th>
+      <th class="ra" aria-sort="none"><button class="sortbtn" type="button">Mass <i class="ph ph-arrows-down-up"></i></button></th>
+      <th>Mounting</th></tr></thead>
+    <tbody>
+      <tr><td class="k">TT-APX-TT-0900</td><td class="n">900</td><td class="n">42 kN</td><td class="n">352</td><td class="n">64 kg</td><td>Stringer clamp</td></tr>
+      <tr><td class="k">TT-APX-TT-1200</td><td class="n">1200</td><td class="n">58 kN</td><td class="n">418</td><td class="n">91 kg</td><td>Stringer clamp</td></tr>
+      <tr><td class="k">TT-APX-TT-1500</td><td class="n">1500</td><td class="n">76 kN</td><td class="n">474</td><td class="n">118 kg</td><td>Stringer clamp</td></tr>
+      <tr><td class="k">TT-APX-TT-1800</td><td class="n">1800</td><td class="n">94 kN</td><td class="n">556</td><td class="n">149 kg</td><td>Bolted bracket</td></tr>
+      <tr><td class="k">TT-APX-TT-2400</td><td class="n">2400</td><td class="n">128 kN</td><td class="n">668</td><td class="n">186 kg</td><td>Bolted bracket</td></tr>
+    </tbody>
+    <tfoot><tr><td>Range</td><td class="n">900 to 2400</td><td class="n">42 to 128 kN</td><td class="n">352 to 668</td><td class="n">64 to 186 kg</td><td class="qt">n/a</td></tr></tfoot>
+  </table></div>
+</section>
+<section>
+  <div class="hd"><h2 class="t-h1">Reports</h2>
+    <p>Dynamic HTML reports and the printed version of the same thing. A figure leads, the finding explains it, and the reference number lets someone quote it back to you.</p></div>
+  <div class="kpis">
+    <div class="kpi"><div class="v hot">31%</div><div class="k">Drift attributed to carry-back</div><div class="d dn"><i class="ph ph-trend-up"></i>Up 4 points on prior period</div></div>
+    <div class="kpi"><div class="v">412</div><div class="k">Flights assessed</div><div class="d up"><i class="ph ph-trend-up"></i>Up 68 on prior period</div></div>
+    <div class="kpi"><div class="v">34<span style="font-size:20px"> mm</span></div><div class="k">Median measured drift</div><div class="d up"><i class="ph ph-trend-down"></i>Down 6 mm on prior period</div></div>
+    <div class="kpi"><div class="v">9</div><div class="k">Sites with an open finding</div><div class="d dn"><i class="ph ph-trend-up"></i>Up 2 on prior period</div></div>
+  </div>
+
+  <div class="two" style="margin-top:var(--s-8)">
+    <div>
+      <h3 class="r" style="margin-top:0">Root cause by incidence</h3>
+      <div class="bars">
+        <div class="b hot"><span>Carry-back build-up</span><span class="t"><i style="width:31%"></i></span><span class="p">31%</span></div>
+        <div class="b"><span>Off-centre loading</span><span class="t"><i style="width:24%"></i></span><span class="p">24%</span></div>
+        <div class="b"><span>Structure out of square</span><span class="t"><i style="width:18%"></i></span><span class="p">18%</span></div>
+        <div class="b"><span>Splice cut off-square</span><span class="t"><i style="width:12%"></i></span><span class="p">12%</span></div>
+        <div class="b"><span>Idler seized</span><span class="t"><i style="width:9%"></i></span><span class="p">9%</span></div>
+        <div class="b"><span>Lagging worn unevenly</span><span class="t"><i style="width:6%"></i></span><span class="p">6%</span></div>
+      </div>
+      <p class="t-cap" style="margin-top:var(--s-4)">Sample data. Share by incidence, not by cost.</p>
+    </div>
+    <div>
+      <h3 class="r" style="margin-top:0">Finding</h3>
+      <div class="finding">
+        <div class="top"><span class="ref">FINDING RC-01</span><i class="ph ph-warning" style="color:var(--accent)"></i></div>
+        <p class="t-body" style="font-size:15px">Carry-back accounts for nearly a third of measured drift and it is a
+        maintenance fault, not a design one. A return tracker contains it. It does not remove the need to fix the scraper.</p>
+        <p class="t-cap" style="margin-top:var(--s-3)">Owner: David Pereira · Due: 30 September</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Presentations</h2>
+    <p>Four masters. Anything that will not fit one of them belongs in a document, not on a slide.</p></div>
+  <div class="slides">
+    <div>
+      <div class="slide dark">
+        <img decoding="async" width="2561" height="671" src="assets/lockup-white.png" alt="">
+        <div class="st">Belt tracking that corrects at the point of error</div>
+        <div class="ss">Tru-Trac Rollers · Electra Mining 2026</div>
+        <div class="sf"><span>TRU-TRAC.COM</span><span>01</span></div>
+      </div>
+      <p class="sheetlbl">Title</p>
+    </div>
+    <div>
+      <div class="slide">
+        <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:20px">
+        <p class="h" style="margin-top:var(--s-4)">Why belts wander</p>
+        <ul>
+          <li>Carry-back builds on the return idlers</li>
+          <li>Loading sits off centre at the chute</li>
+          <li>Structure has moved out of square</li>
+          <li>The splice was cut a degree off</li>
+        </ul>
+        <div class="sf"><span>ROOT CAUSE</span><span>04</span></div>
+      </div>
+      <p class="sheetlbl">Content</p>
+    </div>
+    <div>
+      <div class="slide">
+        <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" style="height:20px">
+        <div style="margin-top:auto"><div class="big">31%</div>
+          <div style="font-size:10px;margin-top:var(--s-2);opacity:.7;max-width:26ch">of measured drift traces back to carry-back on the return side</div></div>
+        <div class="sf"><span>412 FLIGHTS ASSESSED</span><span>07</span></div>
+      </div>
+      <p class="sheetlbl">Single figure</p>
+    </div>
+    <div>
+      <div class="slide dark" style="justify-content:center">
+        <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:.1em;color:var(--accent);margin-bottom:var(--s-2)">SECTION TWO</div>
+        <div style="font-weight:200;font-size:24px;line-height:1.08;letter-spacing:-.03em">What we found on site</div>
+        <div class="sf"><span></span><span>06</span></div>
+      </div>
+      <p class="sheetlbl">Section divider</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Print</h2>
+    <p>The rules that decide whether a PDF looks made or generated. Hit the Print preview button in the bar to see them applied.</p></div>
+  <div class="two">
+    <div>
+      <h3 class="r" style="margin-top:0">Page</h3>
+      <dl class="specs">
+        <div><dt>Size</dt><dd>A4</dd></div>
+        <div><dt>Margins, top / sides / foot</dt><dd>22 / 20 / 20 mm</dd></div>
+        <div><dt>Body size</dt><dd>10.5 pt</dd></div>
+        <div><dt>Leading</dt><dd>1.5</dd></div>
+        <div><dt>Measure</dt><dd>72 characters</dd></div>
+        <div><dt>Orphans and widows</dt><dd>3 lines</dd></div>
+      </dl>
+    </div>
+    <div>
+      <h3 class="r" style="margin-top:0">Breaking</h3>
+      <p class="t-body t-sm mut">Headings never break away from what follows them: <code>break-after: avoid-page</code>
+      on every level. Figures, tables, admonitions and revision blocks never split across a page.
+      Navigation, buttons and mode toggles disappear entirely. External links print their URL after the
+      link text, because a printed link that only says "here" is useless.</p>
+      <div class="adm note" style="margin-top:var(--s-5)"><i class="ph ph-info"></i>
+        <span><b>RUNNING HEADS AND FOLIOS</b><p>The <code>@page</code> margin boxes carrying the running
+        head and page number need a paged formatter. Browsers ignore them. Use WeasyPrint, which is
+        already the Tru-Trac print pipeline, or Paged.js for a browser preview.</p></span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Controls and states</h2>
+    <p>Dynamic HTML reports and web pages need these. A document system that only styles paper is half a system.
+    Every interactive target clears 44 by 44, and focus never animates because focus is keyboard-initiated.</p></div>
+
+  <h3 class="r">Buttons, every state</h3>
+  <div class="tw"><table class="states">
+    <thead><tr><th>Variant</th><th>Rest</th><th>Hover</th><th>Disabled</th><th>Working</th></tr></thead>
+    <tbody>
+      <tr><td><b>Primary</b></td>
+        <td><button class="btn btn-1">Request assessment</button></td>
+        <td><button class="btn btn-1" style="background:var(--accent-hover)">Request assessment</button></td>
+        <td><button class="btn btn-1" disabled>Request assessment</button></td>
+        <td><button class="btn btn-1 busy">Request assessment</button></td></tr>
+      <tr><td><b>Secondary</b></td>
+        <td><button class="btn btn-2">Download manual</button></td>
+        <td><button class="btn btn-2" style="background:var(--hover);border-color:var(--ink-4)">Download manual</button></td>
+        <td><button class="btn btn-2" disabled>Download manual</button></td>
+        <td><button class="btn btn-2 busy">Download manual</button></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note-inline"><i class="ph ph-info"></i>Labels are verb plus object. “Request assessment” beats “Submit”.
+  The label says what happens when it is pressed.</p>
+
+  <h3 class="r">Fields, including the states people forget</h3>
+  <div class="imgrow">
+    <div class="f"><label for="fa">Work email <span class="req" aria-hidden="true">*</span></label>
+      <input class="in" id="fa" type="email" autocomplete="email" placeholder="name@company.co.za" required>
+      <span class="hlp">Routed to the engineer nearest the site</span></div>
+    <div class="f"><label for="fb">Measured drift <span class="req" aria-hidden="true">*</span></label>
+      <input class="in bad" id="fb" type="text" value="a lot" aria-invalid="true" aria-describedby="fbe">
+      <span class="hlp bad" id="fbe" role="alert"><i class="ph ph-warning-circle"></i>Enter drift in millimetres, for example 34</span></div>
+    <div class="f"><label for="fc">Document reference</label>
+      <input class="in" id="fc" value="TT-APX-IOM-01" readonly>
+      <span class="hlp">Read only. Set when the document was issued</span></div>
+    <div class="f"><label for="fd">Site</label>
+      <input class="in" id="fd" value="Set by your administrator" disabled>
+      <span class="hlp">Disabled. Ask an administrator to change it</span></div>
+  </div>
+  <div class="row" style="margin-top:var(--s-5)">
+    <label class="ck"><input type="checkbox" checked><span class="bx"><i class="ph ph-check"></i></span>Carry side</label>
+    <label class="ck"><input type="checkbox"><span class="bx"><i class="ph ph-check"></i></span>Return side</label>
+  </div>
+  <p class="note-inline"><i class="ph ph-info"></i>Read-only and disabled are different states and they look different.
+  Read-only content is still yours; disabled content is not yours to change.</p>
+
+  <h3 class="r">Nothing yet</h3>
+  <div class="emptystate" style="max-width:34rem">
+    <i class="ph ph-list-magnifying-glass"></i>
+    <p><b>No flights assessed yet.</b> Assessments appear here once an engineer has walked a flight and recorded
+    drift at each idler set.</p>
+    <button class="btn btn-2">Request the first assessment</button>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Imagery</h2>
+    <p>Four roles and one tonal grade. Every photograph in the system runs the same grade so that
+    adjacent images on a spread read as one shoot, not as whatever was on the drive.</p>
+    <p class="samp"><i class="ph ph-info"></i>Stock placeholders, verified to resolve. They stand in until the
+    Tru-Trac library is available and none of them shows a Tru-Trac installation.</p></div>
+
+  <h3 class="r">Site, full bleed with an overlay</h3>
+  <div class="hero-shot">
+    <img width="1600" height="1067" src="assets/img/site-plant.jpg"
+          alt="Bulk handling plant under low grey cloud, stacks and conveyor gantries against the skyline" loading="lazy">
+    <div class="over">
+      <img class="lock" src="assets/lockup-white.png" width="2561" height="671" alt="Tru-Trac">
+      <h3>Fitted on 412 flights across eighty countries</h3>
+      <p>Site photography carries the argument that this equipment lives in real plant. It runs full bleed, hard edges, no radius.</p>
+    </div>
+  </div>
+
+  <h3 class="r">Product, condition and technical</h3>
+  <div class="imgrow">
+    <div class="imgcell">
+      <div class="box product"><img class="ph-img" width="900" height="601" src="assets/img/site-technician.jpg"
+         alt="Technician in a hard hat working on a control box mounted to plant steelwork" loading="lazy"></div>
+      <p class="cap"><b>SITE</b>People and plant. Proves the work happens where the customer works. 16:9 or 4:3, full bleed where it leads a page.</p>
+    </div>
+    <div class="imgcell">
+      <div class="box evidence"><img class="ph-img" width="900" height="600" src="assets/img/condition-weld.jpg"
+         alt="Welding sparks across a dark workshop, operator shielded" loading="lazy"></div>
+      <p class="cap"><b>CONDITION</b>Before and after, matched framing, unretouched, dated. Always presented as a pair at 3:2.</p>
+    </div>
+    <div class="imgcell">
+      <div class="box evidence"><img class="ph-img" width="900" height="599" src="assets/img/technical-drawings.jpg"
+         alt="General arrangement drawings laid out on a drawing board with a scale rule" loading="lazy"></div>
+      <p class="cap"><b>TECHNICAL</b>Drawings, sections and dimensioned views. The role that carries a handbook.</p>
+    </div>
+    <div class="imgcell">
+      <div class="box product"><img class="ph-img" width="900" height="707" src="assets/img/application-warehouse.jpg"
+         alt="Long warehouse aisle with racking receding into perspective under strip lighting" loading="lazy"></div>
+      <p class="cap"><b>APPLICATION</b>The industry, not the product. Opens a sector section or a proposal.</p>
+    </div>
+  </div>
+
+  <div class="two" style="margin-top:var(--s-8)">
+    <div><h3 class="r" style="margin-top:0">Treatment</h3>
+      <p class="t-body t-sm mut">Saturation 72 percent, contrast 106, brightness 97. Applied to every photograph
+      without exception, which is what makes a spread read as one grade. Hard edges, no radius, no border on
+      full-bleed imagery. Text over a photograph always sits on a scrim, never directly on the image.</p></div>
+    <div><h3 class="r" style="margin-top:0">Alt text is part of the voice</h3>
+      <p class="t-body t-sm mut">Describe what is in the frame and why it is there. <span class="qt">Bulk handling
+      plant under low grey cloud, stacks and conveyor gantries against the skyline</span> beats
+      <span class="qt">industrial site</span>. Every image carries width and height so nothing shifts as it loads.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Editorial</h2>
+    <p>The parts that carry an argument through a long document. A technical manual without a pull quote and a margin note is a parts list.</p></div>
+
+  <h3 class="r">Pull quote</h3>
+  <blockquote class="pull">
+    <p>Belt damage from mistracking is the cheapest failure to prevent and the most expensive to ignore.</p>
+    <cite>ENGINEERING NOTE EN-114 · SECTION 1.2</cite>
+  </blockquote>
+
+  <h3 class="r">Body with margin notes and footnotes</h3>
+  <div class="sidenoted fn">
+    <div>
+      <p class="t-body">Set the pivot square to the belt centre line before tightening. A unit fitted out of square
+      will correct in one direction only and will present on site as an intermittent fault, usually blamed on the
+      splice.<sup>1</sup></p>
+      <p class="t-body" style="margin-top:var(--s-4)">Torque the stringer clamps to 95 Nm in the sequence shown,
+      then re-check after the first eight hours of running. Thermal cycling relaxes a cold-set clamp.<sup>2</sup></p>
+      <ol class="fnlist">
+        <li><span>1</span><span>Recurrence after a splice replacement almost always indicates the tracker, not the splice.</span></li>
+        <li><span>2</span><span>Figures assume dry, unlubricated fasteners. Reduce by 20 percent with anti-seize applied.</span></li>
+      </ol>
+    </div>
+    <aside class="sidenote"><b>ON SITE</b>An intermittent fault that follows the direction of travel is a squareness
+    problem, not a tension problem. Check the frame before touching the take-up.</aside>
+  </div>
+
+  <h3 class="r">Tabbed disclosure</h3>
+  <div style="max-width:34rem">
+    <div class="tabs" id="tabs" role="tablist" aria-label="Product information">
+      <button class="tb" role="tab" id="tb1" aria-selected="true" aria-controls="tp">Specification</button>
+      <button class="tb" role="tab" id="tb2" aria-selected="false" aria-controls="tp">Installation</button>
+      <button class="tb" role="tab" id="tb3" aria-selected="false" aria-controls="tp">Warranty</button>
+      <span class="tabink" id="tabink"></span>
+    </div>
+    <div class="tabpane" id="tp" role="tabpanel" aria-labelledby="tb1" tabindex="0">Three-roll taper trough on a central pivot, torsion restored. Bolts to the stringer without welding or drilling.</div>
+  </div>
+  <p class="note-inline"><i class="ph ph-info"></i>Arrow keys move between tabs, Home and End jump to the ends. Tabs are for peer content of equal weight; anything sequential belongs in numbered sections.</p>
+
+  <h3 class="r">Page break marker and specification block</h3>
+  <div class="pbreak">PAGE BREAK</div>
+  <pre class="codeblock"><span class="c"># Selection, 1200 mm carry side</span>
+MODEL      TT-APX-TT-1200
+BELT WIDTH 1200 mm
+TENSION     58 kN   <span class="c">(max)</span>
+TROUGH      35°
+TORQUE      95 Nm   <span class="c">(dry, unlubricated)</span></pre>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Grid</h2>
+    <p>Twelve columns at a 24 px gutter, on an 8 px baseline. Every line height in the scale resolves to a whole
+    number of baseline units, so stacked elements never drift out of register across a spread.</p>
+    <button class="btn btn-2 noprint" id="gridtoggle" style="margin-top:var(--s-5)">Show the grid</button></div>
+  <div class="tw"><table class="doc">
+    <caption>Type scale · ratio 1.25 from a 16 px base · every leading a whole multiple of 8</caption>
+    <thead><tr><th>Role</th><th class="ra">Size</th><th class="ra">Leading</th><th class="ra">Baseline units</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Title</td><td class="n">61</td><td class="n">72</td><td class="n">9</td><td>Covers, section openers</td></tr>
+      <tr><td class="k">H1</td><td class="n">39</td><td class="n">48</td><td class="n">6</td><td>Section heads</td></tr>
+      <tr><td class="k">H2</td><td class="n">31</td><td class="n">40</td><td class="n">5</td><td>Sub-section heads</td></tr>
+      <tr><td class="k">H3</td><td class="n">25</td><td class="n">32</td><td class="n">4</td><td>Block heads, pull quotes</td></tr>
+      <tr><td class="k">Lead</td><td class="n">20</td><td class="n">32</td><td class="n">4</td><td>Opening paragraph</td></tr>
+      <tr><td class="k">Body</td><td class="n">16</td><td class="n">24</td><td class="n">3</td><td>Running text, 66ch measure</td></tr>
+      <tr><td class="k">Small</td><td class="n">14</td><td class="n">24</td><td class="n">3</td><td>Tables, notes</td></tr>
+      <tr><td class="k">Caption</td><td class="n">13</td><td class="n">24</td><td class="n">3</td><td>Figure captions, margin notes</td></tr>
+    </tbody>
+  </table></div>
+  <h3 class="r">Rules carry meaning</h3>
+  <div style="max-width:34rem">
+    <div style="border-top:1px solid var(--rule-1);padding-top:8px;margin-bottom:var(--s-5)">
+      <span class="t-cap">Hairline, 8 percent · grouping within a block</span></div>
+    <div style="border-top:1px solid var(--rule-2);padding-top:8px;margin-bottom:var(--s-5)">
+      <span class="t-cap">Rule, 14 percent · separating rows and sections</span></div>
+    <div style="border-top:1.5px solid var(--rule-3);padding-top:8px;margin-bottom:var(--s-5)">
+      <span class="t-cap">Emphasis, 30 percent at 1.5 px · closing a table, framing a quote</span></div>
+    <div style="border-top:2px solid var(--rule-4);padding-top:8px">
+      <span class="t-cap">Heavy · table head, the only rule that reads as structure</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Colour</h2>
+    <p>OKLCH, twelve neutral steps and seven reds. The accent stays under ten percent of any surface and marks the primary action, the focus state, and the one thing under discussion.</p></div>
+  <div class="swatches" style="margin-bottom:2px">
+    <div style="background:var(--n-0);color:var(--n-11);border:1px solid var(--rule-2)">n-0</div>
+    <div style="background:var(--n-1);color:var(--n-11)">n-1</div><div style="background:var(--n-2);color:var(--n-11)">n-2</div>
+    <div style="background:var(--n-3);color:var(--n-11)">n-3</div><div style="background:var(--n-4);color:var(--n-11)">n-4</div>
+    <div style="background:var(--n-5);color:var(--n-11)">n-5</div><div style="background:var(--n-6);color:var(--n-0)">n-6</div>
+    <div style="background:var(--n-7);color:var(--n-0)">n-7</div><div style="background:var(--n-8);color:var(--n-0)">n-8</div>
+    <div style="background:var(--n-9);color:var(--n-0)">n-9</div><div style="background:var(--n-10);color:var(--n-0)">n-10</div>
+    <div style="background:var(--n-11);color:var(--n-0)">n-11</div>
+  </div>
+  <div class="swatches">
+    <div style="background:var(--a-1);color:var(--n-11)">a-1</div><div style="background:var(--a-2);color:var(--n-11)">a-2</div>
+    <div style="background:var(--a-3);color:var(--n-0)">a-3</div><div style="background:var(--a-4);color:var(--n-0)">a-4</div>
+    <div style="background:var(--a-5);color:var(--n-0)">a-5 #E1261C</div>
+    <div style="background:var(--a-6);color:var(--n-0)">a-6</div><div style="background:var(--a-7);color:var(--n-0)">a-7</div>
+  </div>
+</section>
+
+<section>
+  <div class="hd"><h2 class="t-h1">Typography</h2>
+    <p>Archivo across two axes, JetBrains Mono for data only. Weight rises as size falls, which is the relationship that keeps a document hierarchy legible at 10.5 pt.</p></div>
+  <div style="border-top:1px solid var(--rule-2)">
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-title">Correction</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">TITLE · 60 max / 1.04 / −.032em / 200 · covers and openers</div></div>
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-h1">Correction at the point</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">H1 · 38 / 1.14 / −.022em / 300 · section heads</div></div>
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-h2">Correction at the point the belt goes wrong</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">H2 · 23 / 1.26 / −.013em / 500</div></div>
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-h3">The guide roller reads the belt edge and pivots the trough</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">H3 · 17 / 1.40 / −.005em / 600</div></div>
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-body">Set the pivot square to the belt centre line before tightening. A unit fitted out of square will correct in one direction only and will present as an intermittent fault.</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">BODY · 16 screen / 10.5 pt print / 1.62 / 72ch / 400</div></div>
+    <div style="padding:var(--s-4) 0;border-bottom:1px solid var(--rule-2)"><span class="t-data">TT-APX-TT-1200 · 58 kN · ±9° · 95 Nm</span>
+      <div class="t-ref" style="margin-top:var(--s-1)">DATA · 14 / tabular / mono 500 · part numbers, dimensions, torques, revisions</div></div>
+  </div>
+</section>
+
+<div style="height:var(--s-20)"></div>
+</div></main>
+
+<footer class="pagefoot"><div class="w">
+  <img decoding="async" width="1152" height="1186" src="assets/mark-charcoal.png" alt="" id="footmark">
+  <span>TRU-TRAC ROLLERS (PTY) LTD · DESIGN SYSTEM · REV D · 2026-08</span>
+  <span class="rt">ARCHIVO · JETBRAINS MONO · #E1261C</span>
+</div></footer>
+
+<script>
+const tabs=[...document.querySelectorAll('#tabs .tb')],tabink=document.getElementById('tabink'),tp=document.getElementById('tp');
+const tabcopy=["Three-roll taper trough on a central pivot, torsion restored. Bolts to the stringer without welding or drilling.",
+"Lock out the flight. Bolt the base frame to the stringer, set the pivot square to the belt centre line, then release.",
+"Twenty-four months against defects in material and workmanship. Wear components are excluded."];
+function moveInk(){const a=tabs.find(t=>t.getAttribute('aria-selected')==='true');
+  tabink.style.width=a.offsetWidth+'px';tabink.style.transform='translateX('+a.offsetLeft+'px)'}
+function pick(i){tabs.forEach(x=>{x.setAttribute('aria-selected','false');x.tabIndex=-1});
+  tabs[i].setAttribute('aria-selected','true');tabs[i].tabIndex=0;
+  tp.textContent=tabcopy[i];tp.setAttribute('aria-labelledby',tabs[i].id);moveInk()}
+tabs.forEach((t,i)=>{t.tabIndex=i?-1:0;t.addEventListener('click',()=>pick(i));
+  t.addEventListener('keydown',e=>{const k=e.key;let n=null;
+    if(k==='ArrowRight')n=(i+1)%tabs.length; else if(k==='ArrowLeft')n=(i-1+tabs.length)%tabs.length;
+    else if(k==='Home')n=0; else if(k==='End')n=tabs.length-1;
+    if(n!==null){e.preventDefault();pick(n);tabs[n].focus()}})});
+document.fonts.ready.then(moveInk);setTimeout(moveInk,600);addEventListener('resize',moveInk,{passive:true});
+
+const gt=document.getElementById('gridtoggle');
+gt.addEventListener('click',()=>{const r=document.documentElement,on=r.getAttribute('data-grid')==='on';
+  r.setAttribute('data-grid',on?'off':'on'); gt.textContent = on ? 'Show the grid' : 'Hide the grid'});
+
+const mb=document.getElementById('mode'), brand=document.getElementById('brandmark'), fm=document.getElementById('footmark');
+mb.addEventListener('click',()=>{const r=document.documentElement,d=r.getAttribute('data-mode')==='dark';
+  r.setAttribute('data-mode',d?'light':'dark');
+  brand.src = d ? 'assets/lockup-charcoal.png' : 'assets/lockup-red-reverse.png';
+  fm.src    = d ? 'assets/mark-charcoal.png'   : 'assets/mark-red-reverse.png';
+  mb.innerHTML = d ? '<i class="ph ph-moon"></i>' : '<i class="ph ph-sun"></i>';
+  mb.setAttribute('aria-label', d ? 'Switch to dark mode' : 'Switch to light mode')});
+</script>
+</body>
+</html>
