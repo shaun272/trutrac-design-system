@@ -1,143 +1,156 @@
 ---
 name: trutrac-design-system
 description: >-
-  The approved Tru-Trac design system for screen surfaces. Use for ANY Tru-Trac web page,
-  landing page, microsite, HTML dashboard, interactive report, internal tool UI, product UI,
-  app screen, email template, embedded widget, prototype, or Lovable/Figma/React build.
-  Owns the colour tokens, type stack, spacing, radii, elevation rules, component library,
-  logo usage and the dark-stage/light-catalogue section rhythm. Trigger on "build a page for",
-  "make a dashboard", "design the site", "style this UI", "does this match our brand",
-  "use our design system", "brand colours", "which red do we use", "put the logo on", or
-  whenever producing any HTML, JSX, Vue or Svelte that a Tru-Trac audience will see.
-  Also trigger when reviewing or auditing an existing screen for brand compliance.
-  Boundary — this owns SCREEN. A4 print proposals belong to trutrac-proposals; the
-  WeasyPrint print pipeline belongs to trutrac-dynamic-reporting; product motion and CGI
-  belong to trutrac-motion-production. Colour and type here match those skills exactly.
+  The approved Tru-Trac design system. Use for ANY Tru-Trac surface built from these tokens:
+  web page, landing page, microsite, HTML dashboard, interactive or dynamic report, internal
+  tool UI, app screen, email template, embedded widget, prototype, Lovable/Figma/React build,
+  and the document and slide objects (A4 sheet, 16:9 slide) that render from the same token
+  file. Owns the colour tokens, type stack, spacing, radii, elevation rules, the twelve-component
+  library, logo usage and the stage/canvas section rhythm. Use when the request says "build a
+  page for", "make a dashboard", "design the site", "style this UI", "does this match our brand",
+  "use our design system", "brand colours", "which red do we use", "put the logo on", or whenever
+  producing HTML, JSX, Vue or Svelte a Tru-Trac audience will see. Also use when reviewing or
+  auditing an existing screen or document for brand compliance.
+  Boundary: the WeasyPrint print pipeline belongs to trutrac-dynamic-reporting and the A4
+  proposal templates to trutrac-proposals. Both consume the tokens defined here. Product motion
+  and CGI belong to trutrac-motion-production.
 ---
 
-# Tru-Trac design system (screen)
+# Tru-Trac design system
 
-**v9 is authoritative.** Living spec in `system/system.html`. This system is built for
-**documents first**: reports, dynamic HTML reports, PDF, proposals, technical documents, product
-handbooks, presentations and web pages. Light is the primary surface because most of it prints;
-dark is a mode. Built on a **12 column grid at a 24 px gutter over an 8 px baseline**, with a
-modular type scale at ratio 1.25 from a 16 px base. Every leading in the scale resolves to a
-whole number of baseline units. Toggle the grid overlay in the living spec to check registration
-before shipping any page. Logo rules and the ten official assets are in `references/logo.md` — every component in every state, empty and error patterns, the UX copy
-layer, motion patterns, and a named refusal list. Earlier token files are kept for the print and
-document surfaces only. Open the living spec before building anything; it is the system, and the
-prose below is commentary on it.
+**Version 1.0.** The system is `system/system.html`. Everything else in this repo, this file
+included, is commentary on it.
 
-Version 1.0. Structure adapted from the Peloton reference style at
-`styles.refero.design/style/355e8465-df7d-486a-9d76-2ace37d076a2`. Colour, type and logo are
-Tru-Trac's own locked brand values. Where the reference and the Tru-Trac brand standard
-disagreed, the brand standard won. Those decisions are recorded in
-`references/provenance.md` and are not to be quietly reversed.
+Built for documents first: reports, dynamic HTML reports, proposals, technical documents,
+handbooks, presentations and web pages. Light is the primary surface because most of this
+prints. Dark is a mode.
 
-## The one-line description
+12 column grid at a 24px gutter over an 8px baseline. Modular type scale at ratio 1.25 from a
+16px base, every leading resolving to a whole number of baseline units. Toggle the grid overlay
+in the living spec to check registration before shipping.
 
-A dark engineering stage cut by a single red. Deep charcoal full-bleed bands carry the
-message and the call to action, then break into bright grey-white sections where the product,
-the data and the specification do the talking.
+## Precedence
+
+`tokens/tokens.css` and `system/system.html` are the ground truth and they are kept identical,
+105 tokens, same values. Where a reference document disagrees with the token file, **the token
+file wins** and the reference document is the thing that needs fixing. Never resolve a conflict
+by editing a component.
 
 ## Load order
 
-1. `system/system.html` — **the system.** Every component in every state, both modes, live.
-   Open it before building anything; the prose below is commentary on it.
-2. `tokens/tokens.css` — the single canonical token file, extracted from the living spec.
-3. `references/components.md` — the API: variants, states, accessibility contract, do and don't.
-4. `references/logo.md` — the ten official assets and which one goes on which surface.
-5. `references/layout-and-imagery.md` — grid, page rhythm, the four imagery roles.
-6. `references/provenance.md` — why values are what they are, and the two directions retired
-   before this one. Read it before proposing a redesign.
-
+1. `system/system.html` - the system. Every component in every state, both modes, live.
+   Open it before building anything.
+2. `tokens/tokens.css` - the single canonical token file, identical to the spec's inline block.
+3. `references/components.md` - the API: variants, states, accessibility contract, do and don't.
+4. `references/logo.md` - the ten official assets and which one goes on which surface.
+5. `references/layout-and-imagery.md` - page sequence, grid derivatives, the four imagery roles.
+6. `references/provenance.md` - why values are what they are. Read it before proposing a
+   redesign. It records decisions taken against an earlier direction, so read it as history.
 
 ## The rules that carry the system
 
 **Colour.**
-- `#E1261C` is the only chromatic colour in the system. It marks primary actions, the brand
-  mark, and one focus series in a chart. Nothing else.
+- `--accent` is `#E1261C` (Pantone 485C), declared as `--a-5`. It is the only decorative
+  chromatic colour in the system. It marks primary actions, the brand mark, and one focus
+  series in a chart. Nothing else.
 - Red never forms a headline, a section background, a full-width band, a table header band,
-  or a field behind body copy. On any screen, red should read as punctuation.
-- Every other value is a neutral drawn from the `#414042` ramp. Do not invent greys.
-- Never sample a colour from the logo file. The raster contains `#e42526` and `#ed1c24`.
-  Neither is the brand red. The token is `#E1261C` and it is the only correct value.
+  or a field behind body copy. Red reads as punctuation.
+- `--status-ok`, `--status-warn` and `--status-info` are the one exception. They are semantic
+  only: they carry state in an admonition, a validation message or a delta. They never
+  decorate, never theme a section, and never appear as a chart series colour.
+- Every other value is a neutral from the `--n-0` to `--n-11` ramp. Do not invent greys and do
+  not write a raw `oklch()` in a component.
+- Never sample a colour from the logo file. The rasters carry `#e42526` and `#e32726`, and
+  `#3a3a3c` for charcoal. None of those is the brand value.
 
 **Type.**
-- Plus Jakarta Sans 600 for every heading and display line.
-- Inter 400 for body copy, Inter 500 for nav links, buttons and UI labels.
-- JetBrains Mono 500 for numerals, part codes, references and micro-labels only. Never a
-  whole table body, never a caption, never a paragraph.
-- Do not use weight 700 or 800 anywhere. Do not use a light display weight.
+- `--font-sans` is **Archivo**, a variable face loaded at `wdth 75..125, wght 100..900`.
+- `--font-mono` is **JetBrains Mono** for numerals, part codes, references and micro-labels
+  only. Never a whole table body, never a caption, never a paragraph.
+- Weight 600 for headings and display lines, 500 for nav links, buttons and UI labels, 400 for
+  body copy. **600 is the ceiling. Never 700 or 800.**
+- Weights 300 and 200 are reserved for two jobs only: the large KPI figure and the pull quote.
+  Never for body copy, never for a heading.
+- The scale is named by role (`--f-body`, `--l-h2`); spacing is named by number (`--s-4`).
+  That asymmetry is deliberate. Do not "fix" one to match the other.
 
 **Shape.**
-- Three radii do almost all the work: 6px inputs, tags and in-card images; 24px cards;
-  28px buttons. 999px is reserved for the floating support widget.
+- Three radii: `--r-1` 2px, `--r-2` 3px, `--r-3` 5px. This is a near-square system and it is
+  meant to be. Do not soften it.
 - Hero and evidence photography runs full-bleed with hard edges and no radius.
-- No square 0px corners on interactive elements, no fully circular buttons.
+- The only circle in the system is the checkbox tick container.
 
 **Elevation.**
-- No drop shadows. Anywhere. Depth comes from surface contrast: stage against canvas,
-  white card against canvas, hairline border at `#E3E3E3`.
+- No drop shadows. Anywhere. Depth comes from surface contrast: `--page` against `--panel`,
+  and the `--rule-1` to `--rule-4` hairline ramp.
+- The one permitted `box-shadow` is a focus ring at zero offset and zero blur. A ring cannot
+  cast, it can only surround.
 
 **Rhythm.**
-- Alternate full-bleed `#1D1C1E` stage bands with `#F7F7F7` content sections. A page with one
-  dark band at the top and nothing else is not using the system.
+- Alternate full-bleed stage bands with light content sections. A page with one dark band at
+  the top and nothing else is not using the system.
 - Content sections centre at 1200px max width. Stage bands span the viewport.
-- Light sections carry 40px padding per side, so adjacent sections sit 80px apart. Stage bands
-  carry 96px. Padding does not compound into 128px voids.
-- Body copy never runs wider than 68ch, whatever the container.
-- Never place a white card or light block on a stage band. Stage carries headline, supporting
-  line, imagery and CTAs. Nothing else.
+- Light sections carry `--s-10` (40px) per side, so adjacent sections sit 80px apart. Stage
+  bands carry `--s-24` (96px). Padding does not compound into 128px voids.
+- Body copy never runs wider than `--layout-measure` (66ch), whatever the container.
+- Never place a white card or light block on a stage band.
 - Full sequence and grid derivatives in `references/layout-and-imagery.md`.
+
+**Modes and paper.**
+- Light is `:root`. Dark is `[data-mode="dark"]` and re-points the semantic layer only.
+- Primitives never flip. `--paper-*` tokens never flip either: a sheet is paper whether you are
+  reading it on a dark screen or not. The Sheet and Slide components sit on `--paper-*`.
 
 **Photography and icons.**
 - Real plant and site photography. Product on white only inside product tiles.
 - One tonal grade across a whole page. Mixed white balance between adjacent images is the
   clearest sign a page was assembled from whatever was on the drive.
-- Icons are line-based, 1.5px stroke, single colour: white on stage, `#414042` on light.
-  No filled multicolour icons, no illustration sets.
+- Icons are Phosphor, line-based, single colour. No filled multicolour icons, no illustration
+  sets.
 
 **Motion.**
-- The 300deg shimmer gradient is for skeleton loading states only. Never decorative.
+- `--t-press` 110ms, `--t-ui` 180ms, `--t-panel` 280ms, on `--ease-out` or `--ease-spring`.
+- Focus never animates. It is keyboard-initiated and must appear instantly.
+- The shimmer gradient is for skeleton loading states only. Never decorative.
 
 ## Accessibility floor
 
-Body text 4.5:1 minimum against its surface. Input borders and other non-text UI 3:1
-minimum. Never carry a distinction on colour alone; add a label, a position or a shape.
-`scripts/validate.py` checks these automatically. Run it.
+Body text 4.5:1 minimum against its surface. Input borders and other non-text UI 3:1 minimum.
+Minimum target 44px via `--layout-tap`. Never carry a distinction on colour alone; add a label,
+a position or a shape.
 
 ## Verify before you hand anything over
 
-Every screen this system produces gets checked before it leaves:
-
 ```bash
-python3 scripts/selfcheck.py                    # the skill is sound and will load
-python3 scripts/ds-audit.py  system/system.html   # token discipline, naming, completeness,
-                                                #   and runtime resolution in a real browser
+python3 scripts/selfcheck.py                     # the skill is sound and will load
+python3 scripts/ds-audit.py system/system.html   # token discipline, naming, completeness,
+                                                 #   runtime resolution in a real browser
+python3 scripts/density.py path/to/page.html     # the page is not EMPTY
 
 # Never hand-edit a token name. Renames touch the spec, the token file and the docs:
 python3 scripts/rename-token.py --old focus --new accent-focus
-python3 scripts/validate.py  path/to/page.html  # the page is not WRONG
-python3 scripts/density.py   path/to/page.html  # the page is not EMPTY
 ```
 
-`validate.py` fails on off-token colours, wrong radii, any drop shadow, wrong font family,
-heading weights above 600, the wrong logo variant on a surface, and contrast below the floor.
-
-`density.py` renders the page at six widths and fails on horizontal overflow, on a dead run
-over 260px, or on a genuinely abandoned page. It reports cell occupancy but no longer gates on
+`density.py` renders at six widths and fails on horizontal overflow, on a dead run over
+`DEAD_RUN_MAX`, or on a genuinely abandoned page. It reports cell occupancy but does not gate on
 it: the chosen reference measures 20.6% and a rejected page measured 27.2%, so occupancy does
 not predict the judgement. The calibration history is in the script and is worth reading before
-anyone adds a metric to this gate. **This is the gate that matters.** A page can
-clear `validate.py` completely and still be rejected on sight, because a hex-code checker
-cannot tell a considered page from an empty one. Both gates, every time.
+anyone adds a metric to this gate. **This is the gate that matters.** A page can be perfectly
+token-clean and still be rejected on sight, because no static checker can tell a considered page
+from an empty one.
+
+There is no hex-and-pixel compliance checker. One existed, it could not read `oklch()` or
+resolve `var()`, so it passed everything including a violet accent and a 1.3:1 button, and it
+was removed. `ds-audit.py` is the token-discipline gate. If you want a colour rule enforced,
+add it there where the values can actually be resolved.
 
 ## Anti-patterns
 
 - A second accent colour "just for this one chart".
+- A status colour used to theme a section or brighten a layout.
 - A red hero band, or white text on a large red field.
 - Card shadows added to "lift" a grid.
+- Softening the radii because 2px "looks unfinished".
 - The supplied logo dropped straight onto a dark surface. It is a knockout mark and the
   counterforms will fill with the background. Use the reverse asset.
 - Body copy set in JetBrains Mono because it "looks technical". It reads as debug output.

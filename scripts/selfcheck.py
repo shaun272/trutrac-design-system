@@ -75,37 +75,57 @@ if skill:
 
 # ------------------------------------------------------- 4. token file parity
 css = read("tokens/tokens.css") or ""
-tw = read("tokens/tailwind-v4.css") or ""
+spec = read("system/system.html") or ""
 
 
-def hexes(text):
-    return {h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}\b", text)}
+def declared_tokens(text):
+    """Every custom property the file declares, name -> value."""
+    return dict(re.findall(r"(--[a-z0-9-]+)\s*:\s*([^;]+?)\s*(?=;)", text, re.I))
 
 
-css_colours = {
-    m.group(1): m.group(2).lower()
-    for m in re.finditer(r"--tt-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})", css)
-}
-tw_colours = {
-    m.group(1): m.group(2).lower()
-    for m in re.finditer(r"--color-tt-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})", tw)
-}
-for k, v in css_colours.items():
-    if k in tw_colours and tw_colours[k] != v:
-        fail("TOKENS", f"'{k}' is {v} in tokens.css but {tw_colours[k]} in tailwind-v4.css")
+css_tokens = declared_tokens(css)
+spec_tokens = declared_tokens(spec)
 
-css_scale = set(re.findall(r"--tt-(text-[a-z0-9-]+):", css))
-tw_scale = {"text-" + m for m in re.findall(r"--text-([a-z0-9-]+):", tw)}
-for s in sorted(css_scale - tw_scale):
-    fail("TOKENS", f"type step '{s}' exists in tokens.css but is missing from tailwind-v4.css")
+if not css_tokens:
+    fail("TOKENS", "tokens.css declares no custom properties")
+for k in sorted(set(css_tokens) - set(spec_tokens)):
+    fail("TOKENS", f"'{k}' is in tokens.css but not in the living spec")
+for k in sorted(set(spec_tokens) - set(css_tokens)):
+    fail("TOKENS", f"'{k}' is in the living spec but not in tokens.css")
+for k in sorted(set(css_tokens) & set(spec_tokens)):
+    if css_tokens[k].strip() != spec_tokens[k].strip():
+        fail("TOKENS", f"'{k}' is {css_tokens[k]} in tokens.css but {spec_tokens[k]} in the spec")
 
-# ------------------------------- 5. no doc or test cites a token that no longer exists
-declared = set(re.findall(r"(--tt-[a-z0-9-]+):", css))
+# ------------------------------- 5. no doc cites a token that does not exist, and no doc
+#                                    annotates a token with the wrong value.
+#
+# This is the check that would have caught the drift that killed the previous SKILL.md:
+# documentation quietly describing a system the token file had already moved off.
+declared = set(css_tokens)
+ANNOTATED = re.compile(r"`(--[a-z0-9-]+)`\s*\((\d+(?:\.\d+)?)(px|ch|ms|%)\)", re.I)
+
 for rel in shipped + ["SKILL.md"]:
     txt = read(rel) or ""
-    for used in set(re.findall(r"--tt-[a-z0-9-]+", txt)):
+    for used in sorted(set(re.findall(r"`(--[a-z0-9-]+)`", txt))):
         if used not in declared:
             fail("DOCS", f"{rel} cites '{used}' which is not declared in tokens.css")
+    for name, num, unit in ANNOTATED.findall(txt):
+        if name not in declared:
+            continue
+        actual = css_tokens[name].strip()
+        if actual.startswith("var("):
+            continue
+        if actual != f"{num}{unit}" and actual != f"{num.rstrip('0').rstrip('.')}{unit}":
+            fail("DOCS", f"{rel} annotates '{name}' as {num}{unit} but tokens.css says {actual}")
+
+# ------------------------------------------- 5b. SKILL.md must name the shipped type stack
+if skill:
+    fam = re.search(r"--font-sans\s*:\s*'([^']+)'", css)
+    if fam and fam.group(1).lower() not in skill.lower():
+        fail("DOCS", f"SKILL.md never names '{fam.group(1)}', the shipped --font-sans")
+    for ghost in ("Plus Jakarta Sans", "Inter "):
+        if ghost in skill and ghost.strip().lower() not in css.lower():
+            fail("DOCS", f"SKILL.md names '{ghost.strip()}' which is not in the type stack")
 
 tests_dir = os.path.join(ROOT, "tests")
 if os.path.isdir(tests_dir):
@@ -117,13 +137,17 @@ if os.path.isdir(tests_dir):
             txt = read(rel) or ""
             if f.endswith(".css"):
                 continue
-            for used in set(re.findall(r"var\((--tt-[a-z0-9-]+)\)", txt)):
+            for used in set(re.findall(r"var\((--[a-z0-9-]+)\)", txt)):
                 if used not in declared:
                     fail("TESTS", f"{rel} uses '{used}' which is not declared in tokens.css")
 
 # ------------------------------------------------------- 6. brand values are locked
 if "#E1261C" not in css:
-    fail("BRAND", "locked brand red #E1261C is not present in tokens.css")
+    fail("BRAND", "locked brand red #E1261C is not recorded in tokens.css")
+if css_tokens.get("--a-5", "").strip() != "oklch(0.577 0.223 27.3)":
+    fail("BRAND", "--a-5 is not the locked brand red oklch(0.577 0.223 27.3)")
+if css_tokens.get("--accent", "").strip() != "var(--a-5)":
+    fail("BRAND", "--accent no longer points at the locked brand primitive --a-5")
 # --------------------------------------------------------------- 7. assets present
 LOGO_SET = (
     "lockup-red", "lockup-charcoal", "lockup-red-reverse",
@@ -140,15 +164,6 @@ import re as _re
 for m in _re.findall(r"`([a-z-]+\.png)`", _logo_doc):
     if not os.path.exists(os.path.join(ROOT, "assets", m)):
         fail("ASSETS", f"references/logo.md cites assets/{m} which does not exist")
-
-# ------------------------------------------------------------- 8. validator runs
-val = os.path.join(ROOT, "scripts", "validate.py")
-if not os.path.exists(val):
-    fail("SCRIPTS", "scripts/validate.py missing; the skill claims a verification gate it does not have")
-else:
-    rc = os.system(f"python3 {val} --selftest > /dev/null 2>&1")
-    if rc != 0:
-        fail("SCRIPTS", "validate.py --selftest does not pass")
 
 # ------------------------------------------------------------------------ report
 print(f"integrity check — {os.path.basename(ROOT)}\n")

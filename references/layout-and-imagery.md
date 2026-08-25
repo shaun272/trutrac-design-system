@@ -32,10 +32,10 @@ and at least one section that is not a grid.
 
 ## Rhythm
 
-- Light section padding is `--s-20` (40px) per side, so adjacent sections sit 80px
+- Light section padding is `--s-10` (40px) per side, so adjacent sections sit 80px
   apart. Do not add 64px per side and create a 128px void.
 - Stage bands carry `--s-24` (96px) per side. They are the pauses.
-- Body copy never exceeds `--layout-measure` (68ch) regardless of container width.
+- Body copy never exceeds `--layout-measure` (66ch) regardless of container width.
 - A section whose bottom third is empty is unfinished. Either the content is thin or the
   section should not exist.
 
