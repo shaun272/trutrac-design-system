@@ -87,7 +87,11 @@
   --accent-hover:var(--a-4); --accent-tint:oklch(0.577 0.223 27.3 /.18);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:clip}
+html{overflow-x:clip;
+  /* WCAG 2.2 AA, Focus Not Obscured. The sticky bar is 61px; scroll-padding keeps
+     any element scrolled into view clear of it, for anchors and keyboard focus alike.
+     scroll-margin on sections alone does not cover focusable children. */
+  scroll-padding-top:76px}
 body{background:var(--page);color:var(--ink);font-family:var(--font-sans);
   font-size:var(--f-body);line-height:var(--l-body);
   font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
@@ -116,10 +120,10 @@ a{color:inherit}
 p,li,dd{orphans:3;widows:3}
 .t-sm{font-size:var(--f-sm);line-height:var(--l-sm)}
 .t-cap{font-size:var(--f-cap);line-height:var(--l-cap);color:var(--ink-3)}
-.t-data{font-family:var(--font-mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.t-data{font-family:var(--font-mono);font-weight:500;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;overflow-wrap:anywhere}
 .t-ref{font-family:var(--font-mono);font-weight:400;font-size:11.5px;letter-spacing:.05em;color:var(--ink-4)}
 .mut{color:var(--ink-2)} .qt{color:var(--ink-3)}
-code{font-family:var(--font-mono);font-size:.87em;color:var(--ink-2);background:var(--panel);padding:1px 5px;border-radius:var(--r-1)}
+code{font-family:var(--font-mono);font-size:.87em;color:var(--ink-2);background:var(--panel);padding:1px 5px;border-radius:var(--r-1);overflow-wrap:anywhere}
 
 /* ══ PAGE CHROME ══ */
 .bar{position:sticky;top:0;z-index:var(--z-sticky);background:color-mix(in oklch,var(--page) 90%,transparent);
@@ -208,7 +212,7 @@ table.doc th{text-align:left;font-weight:600;font-size:12.5px;letter-spacing:.02
 table.doc td{padding:var(--s-3) 12px;border-bottom:1px solid var(--rule-2)}
 table.doc tbody tr:nth-child(even){background:var(--page-tint)}
 table.doc td.n{font-family:var(--font-mono);font-weight:400;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-table.doc td.k{font-family:var(--font-mono);font-weight:500;white-space:nowrap}
+table.doc td.k{font-family:var(--font-mono);font-weight:500;overflow-wrap:anywhere}
 table.doc tfoot td{border-top:1.5px solid var(--rule-4);border-bottom:0;font-weight:600;padding-top:var(--s-3)}
 .tw{overflow-x:auto;max-width:100%} .tw table{min-width:560px}
 

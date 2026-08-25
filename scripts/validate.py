@@ -81,6 +81,25 @@ FAMILY_RE = re.compile(r"font-family\s*:\s*([^;}]+)", re.I)
 WEIGHT_RE = re.compile(r"font-weight\s*:\s*(\d{3})", re.I)
 IMG_RE = re.compile(r'<img[^>]+src\s*=\s*["\']([^"\']+)["\'][^>]*>', re.I)
 
+def strip_documentation(text):
+    """Remove <code> spans and drawing-annotation <text> before the colour check.
+
+    A page that documents its own rules will quote the values it forbids. The
+    DO-NOT-SAMPLE warning names the three raster colours precisely so nobody uses
+    them; flagging that as usage punishes the system for explaining itself."""
+    text = blank_out(text, r"<code\b.*?</code>", re.S | re.I)
+    text = blank_out(text, r"<text\b.*?</text>", re.S | re.I)
+    return text
+
+
+def blank_out(text, pattern, flags=0):
+    """Replace a match with the same number of newlines, so every later line
+    number still points at the real file. Deleting the block shifted them."""
+    def keep(m):
+        return "\n" * m.group(0).count("\n")
+    return re.sub(pattern, keep, text, flags=flags)
+
+
 def strip_token_defs(text):
     """Remove the :root/@theme token block so token definitions are not
     themselves reported as hardcoded values, and remove SVG <defs> blocks.
@@ -90,8 +109,8 @@ def strip_token_defs(text):
     brand token list has no business governing it. The ramp is constrained
     separately: neutrals plus the brand red, no other hue. See
     references/art-direction.md."""
-    text = re.sub(r"(:root|@theme)\s*\{.*?\n\s*\}", "", text, flags=re.S)
-    text = re.sub(r"<defs\b.*?</defs>", "", text, flags=re.S | re.I)
+    text = blank_out(text, r"(:root|@theme)\s*\{.*?\n\s*\}", re.S)
+    text = blank_out(text, r"<defs\b.*?</defs>", re.S | re.I)
     return text
 
 HUE_TOL = 14   # max channel spread before a "neutral" is really a colour
@@ -116,7 +135,7 @@ def check_material_ramp(text):
 def check(path, text):
     v = []
     v.extend(check_material_ramp(text))
-    body = strip_token_defs(text)
+    body = strip_documentation(strip_token_defs(text))
 
     for m in HEX_RE.finditer(body):
         h = m.group(0).lower()
@@ -139,6 +158,12 @@ def check(path, text):
     for m in SHADOW_RE.finditer(body):
         raw = m.group(1).strip().lower()
         if raw in ("none", "var(--tt-shadow)"):
+            continue
+        # A focus ring is not a drop shadow. box-shadow with zero offset AND zero
+        # blur is a ring: it cannot cast, only surround. Browsers still render the
+        # outline property inside overflow:hidden inconsistently, so a spread-only
+        # box-shadow is the correct implementation and the system permits it.
+        if re.match(r"^0\s+0\s+0\s+\d", raw) or re.match(r"^inset\s+0\s+0\s+0\s+\d", raw):
             continue
         line = body[:m.start()].count("\n") + 1
         v.append((line, "SHADOW", "the system has no drop shadows"))
