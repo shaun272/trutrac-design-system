@@ -34,11 +34,44 @@ in the living spec to check registration before shipping.
 file wins** and the reference document is the thing that needs fixing. Never resolve a conflict
 by editing a component.
 
+## Where these files are
+
+**The installed skill is this file alone.** Everything it points at lives in the public repo:
+
+**https://github.com/shaun272/trutrac-design-system**
+
+If `system/system.html`, `tokens/tokens.css` or the `references/` documents are not on disk
+beside this file, fetch them before building anything. Raw paths:
+
+```
+.../raw/main/system/system.html
+.../raw/main/tokens/tokens.css
+.../raw/main/references/components.md
+.../raw/main/references/logo.md
+.../raw/main/references/layout-and-imagery.md
+.../raw/main/references/provenance.md
+```
+
+Full form, for the token file as the example:
+`https://raw.githubusercontent.com/shaun272/trutrac-design-system/main/tokens/tokens.css`
+
+The ten logo assets and the verification scripts are in the same repo. If you are building more
+than one page, clone it rather than fetching file by file:
+
+```bash
+git clone https://github.com/shaun272/trutrac-design-system.git
+```
+
+**Do not build from this file alone.** What follows is a summary. The spec carries every
+component in every state, both modes, and the exact token values. A page built from the summary
+will be approximately right, which for a design system is the same as wrong.
+
 ## Load order
 
 1. `system/system.html` - the system. Every component in every state, both modes, live.
-   Open it before building anything.
+   Open it before building anything. Fetch it from the repo if it is not on disk.
 2. `tokens/tokens.css` - the single canonical token file, identical to the spec's inline block.
+   Fetch it from the repo if it is not on disk.
 3. `references/components.md` - the API: variants, states, accessibility contract, do and don't.
 4. `references/logo.md` - the ten official assets and which one goes on which surface.
 5. `references/layout-and-imagery.md` - page sequence, grid derivatives, the four imagery roles.
